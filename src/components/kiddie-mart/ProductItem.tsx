@@ -10,14 +10,19 @@ import { useState } from 'react';
 
 interface ProductItemProps {
   product: Product;
+  onAddToCart?: () => void;
 }
 
-export function ProductItem({ product }: ProductItemProps) {
+export function ProductItem({ product, onAddToCart }: ProductItemProps) {
   const { addToCart } = useKiddieMart();
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddToCart = () => {
-    addToCart(product);
+    if (onAddToCart) {
+      onAddToCart();
+    } else {
+      addToCart(product);
+    }
     setIsAdding(true);
     setTimeout(() => setIsAdding(false), 500); // Duration of animation
   };
@@ -26,11 +31,11 @@ export function ProductItem({ product }: ProductItemProps) {
     <Card className={`flex flex-col justify-between overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${isAdding ? 'animate-item-added' : ''}`}>
       <CardHeader className="p-3 md:p-4 text-center">
         {(product.image && (product.image.startsWith('http://') || product.image.startsWith('https://'))) ? (
-          <Image 
-            src={product.image} 
-            alt={product.name} 
-            width={150} 
-            height={150} 
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={150}
+            height={150}
             className="mx-auto mb-3 rounded-lg object-cover aspect-square"
             data-ai-hint={product.dataAiHint}
           />
@@ -47,8 +52,8 @@ export function ProductItem({ product }: ProductItemProps) {
         </p>
       </CardContent>
       <CardFooter className="p-2 md:p-3">
-        <Button 
-          onClick={handleAddToCart} 
+        <Button
+          onClick={handleAddToCart}
           className="w-full rounded-lg text-sm md:text-base px-3 py-2.5 bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent items-baseline whitespace-normal h-auto"
           disabled={product.stock <= 0 || isAdding}
           aria-label={`Añadir ${product.name} a la bolsa`}

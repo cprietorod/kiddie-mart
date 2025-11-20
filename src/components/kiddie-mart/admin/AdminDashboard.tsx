@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ProductManagement } from './ProductManagement';
 import { SalesHistoryView } from './SalesHistoryView';
+import { AdminWalletManagement } from './AdminWalletManagement';
 import { ReportsDashboardView } from './ReportsDashboardView';
-import { LayoutDashboard, Package, ReceiptText, LineChart, ShoppingBasket, Sparkles } from 'lucide-react'; // Changed ToyBrick to ShoppingBasket
+import { LayoutDashboard, Package, ReceiptText, LineChart, ShoppingBasket, Sparkles, Wallet } from 'lucide-react'; // Changed ToyBrick to ShoppingBasket
 import type { AppView } from '@/types/kiddieMart';
 
 interface NavItemProps {
@@ -23,9 +24,9 @@ const NavItem: React.FC<NavItemProps> = ({ view, currentView, setView, icon, lab
       variant={currentView === view ? 'secondary' : 'ghost'}
       onClick={() => setView(view)}
       className={`w-full justify-start text-base py-3 px-4 rounded-lg transition-all duration-200
-                  ${currentView === view 
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-md transform scale-105' 
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}
+                  ${currentView === view
+          ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-md transform scale-105'
+          : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}
     >
       {icon} {label}
     </Button>
@@ -46,6 +47,9 @@ export function AdminDashboard() {
     case 'admin_reports':
       content = <ReportsDashboardView />;
       break;
+    case 'admin_wallets':
+      content = <AdminWalletManagement />;
+      break;
     case 'admin_dashboard':
     default:
       content = (
@@ -63,7 +67,7 @@ export function AdminDashboard() {
     <div className="flex h-screen pt-16 bg-muted/40">
       <nav className="w-64 bg-sidebar text-sidebar-foreground flex flex-col flex-shrink-0 shadow-2xl">
         <div className="p-5 text-2xl font-bold border-b border-sidebar-border flex items-center gap-2">
-            <Sparkles className="h-7 w-7 text-sidebar-primary" /> Admin Mini Market
+          <Sparkles className="h-7 w-7 text-sidebar-primary" /> Admin Mini Market
         </div>
         <ScrollArea className="flex-grow">
           <ul className="p-3 space-y-2">
@@ -71,10 +75,11 @@ export function AdminDashboard() {
             <NavItem view="admin_products" currentView={currentView} setView={setCurrentView} icon={<Package className="mr-3 h-6 w-6" />} label="Lista de Productos" />
             <NavItem view="admin_sales" currentView={currentView} setView={setCurrentView} icon={<ReceiptText className="mr-3 h-6 w-6" />} label="Historial de Ventas" />
             <NavItem view="admin_reports" currentView={currentView} setView={setCurrentView} icon={<LineChart className="mr-3 h-6 w-6" />} label="Reportes" />
+            <NavItem view="admin_wallets" currentView={currentView} setView={setCurrentView} icon={<Wallet className="mr-3 h-6 w-6" />} label="Billeteras / Cuentas" />
           </ul>
         </ScrollArea>
         <div className="p-4 border-t border-sidebar-border text-center text-xs text-sidebar-foreground/70">
-            Admin Mini Market v1.0
+          Admin Mini Market v1.0
         </div>
       </nav>
       <main className="flex-1 bg-background overflow-y-auto">

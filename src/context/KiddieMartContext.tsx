@@ -2,7 +2,7 @@
 "use client";
 import type { ReactNode } from 'react';
 import React, { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react';
-import type { Product, CartItem, SaleRecord, UserSession, AppView } from '@/types/kiddieMart';
+import type { Product, CartItem, SaleRecord, UserSession, AppView, Account, CashierDifficulty } from '@/types/kiddieMart';
 import { INITIAL_PRODUCTS, MOCK_SALES_HISTORY } from '@/lib/kiddieMartMockData';
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -14,7 +14,10 @@ import {
   bulkAddProductsDB,
   getAllSalesHistory,
   addSaleRecordDB,
-  bulkAddSalesHistoryDB
+  bulkAddSalesHistoryDB,
+  getAllAccounts,
+  addAccountDB,
+  updateAccountDB
 } from '@/lib/indexedDbService';
 
 interface KiddieMartContextType {
@@ -30,12 +33,18 @@ interface KiddieMartContextType {
   currentView: AppView;
   setCurrentView: (view: AppView) => void;
   salesHistory: SaleRecord[];
-  recordSale: (paymentMethod: 'Card' | 'Cash') => void;
+  recordSale: (paymentMethod: 'Card' | 'Cash' | 'QR', qrCode?: string) => Promise<boolean>;
   products: Product[];
   addProduct: (newProductData: Omit<Product, 'id'>) => void;
   updateProduct: (productId: string, updatedProductData: Partial<Omit<Product, 'id'>>) => void;
   deleteProduct: (productId: string) => void;
   isLoadingData: boolean;
+  // New Features
+  accounts: Account[];
+  createAccount: (name: string, initialBalance: number) => void;
+  topUpAccount: (accountId: string, amount: number) => void;
+  cashierDifficulty: CashierDifficulty;
+  setCashierDifficulty: (difficulty: CashierDifficulty) => void;
 }
 
 const KiddieMartContext = createContext<KiddieMartContextType | undefined>(undefined);
@@ -47,6 +56,8 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
   const [currentView, setCurrentView] = useState<AppView>('login');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [cashierDifficulty, setCashierDifficulty] = useState<CashierDifficulty>('preschool');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -66,16 +77,19 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
         if (dbSalesHistory.length === 0 && MOCK_SALES_HISTORY.length > 0) {
           console.log('No sales history in DB, seeding mock sales history...');
           await bulkAddSalesHistoryDB(MOCK_SALES_HISTORY);
-          dbSalesHistory = MOCK_SALES_HISTORY.sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+          dbSalesHistory = MOCK_SALES_HISTORY.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         }
         setSalesHistory(dbSalesHistory);
+
+        let dbAccounts = await getAllAccounts();
+        setAccounts(dbAccounts);
 
       } catch (error) {
         console.error("Error loading data from IndexedDB:", error);
         toast({ title: "Error de Carga 😟", description: "No se pudieron cargar los datos de la tienda.", variant: "destructive" });
         // Fallback to mock data if IndexedDB fails critically during init
         setProducts(INITIAL_PRODUCTS);
-        setSalesHistory(MOCK_SALES_HISTORY.sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
+        setSalesHistory(MOCK_SALES_HISTORY.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
       } finally {
         setIsLoadingData(false);
       }
@@ -123,8 +137,8 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
       );
       setCart(prevCart => prevCart.map(item =>
         item.product.id === productId
-        ? { ...item, product: updatedProduct }
-        : item
+          ? { ...item, product: updatedProduct }
+          : item
       ));
       toast({ title: "¡Producto Actualizado! 🛠️", description: "Cambios guardados correctamente." });
     } catch (error) {
@@ -153,7 +167,7 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
       toast({ title: "¡Agotado! 😟", description: `${productToAdd.name} no está disponible actualmente.`, variant: "destructive" });
       return;
     }
-    
+
     setCart((prevCart) => {
       const existingItem = prevCart.find(item => item.product.id === productToAdd.id);
       if (existingItem) {
@@ -214,16 +228,71 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
     toast({ title: "Sesión Cerrada 👋", description: "¡Hasta la próxima!" });
   }, [toast]);
 
-  const recordSale = useCallback(async (paymentMethod: 'Card' | 'Cash') => {
+  const createAccount = useCallback(async (name: string, initialBalance: number) => {
+    const newAccount: Account = {
+      id: `acc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      name,
+      balance: initialBalance,
+      qrCode: `ACC_${name.toUpperCase().replace(/\s+/g, '_')}_${Math.floor(Math.random() * 1000)}`
+    };
+    try {
+      await addAccountDB(newAccount);
+      setAccounts(prev => [...prev, newAccount]);
+      toast({ title: "¡Cuenta Creada! 🎉", description: `Billetera para ${name} lista.` });
+    } catch (error) {
+      console.error("Error creating account:", error);
+      toast({ title: "Error 😟", description: "No se pudo crear la cuenta.", variant: "destructive" });
+    }
+  }, [toast]);
+
+  const topUpAccount = useCallback(async (accountId: string, amount: number) => {
+    const account = accounts.find(a => a.id === accountId);
+    if (!account) return;
+
+    const updatedAccount = { ...account, balance: account.balance + amount };
+    try {
+      await updateAccountDB(updatedAccount);
+      setAccounts(prev => prev.map(a => a.id === accountId ? updatedAccount : a));
+      toast({ title: "¡Recarga Exitosa! 💰", description: `Se añadieron $${amount} a ${account.name}.` });
+    } catch (error) {
+      console.error("Error updating account:", error);
+      toast({ title: "Error 😟", description: "No se pudo recargar la cuenta.", variant: "destructive" });
+    }
+  }, [accounts, toast]);
+
+  const recordSale = useCallback(async (paymentMethod: 'Card' | 'Cash' | 'QR', qrCode?: string): Promise<boolean> => {
+    if (paymentMethod === 'QR' && qrCode) {
+      const account = accounts.find(a => a.qrCode === qrCode);
+      if (!account) {
+        toast({ title: "¡Error! ❌", description: "Código QR no válido.", variant: "destructive" });
+        return false;
+      }
+      if (account.balance < cartTotal) {
+        toast({ title: "¡Saldo Insuficiente! 💸", description: `Saldo actual: $${account.balance.toFixed(2)}`, variant: "destructive" });
+        return false;
+      }
+
+      // Deduct from account
+      const updatedAccount = { ...account, balance: account.balance - cartTotal };
+      try {
+        await updateAccountDB(updatedAccount);
+        setAccounts(prev => prev.map(a => a.id === account.id ? updatedAccount : a));
+      } catch (error) {
+        console.error("Error deducting balance:", error);
+        toast({ title: "Error 😟", description: "Error al procesar el pago QR.", variant: "destructive" });
+        return false;
+      }
+    }
+
     const newSale: SaleRecord = {
       id: `sale_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
       total: cartTotal,
       items: cart.reduce((sum, item) => sum + item.quantity, 0),
-      paymentMethod: paymentMethod,
+      paymentMethod: paymentMethod as 'Card' | 'Cash', // Cast for now, maybe update type later if needed strictly
       details: cart
     };
-    
+
     const updatedProductsStock: Product[] = [];
     const productUpdatesPromises: Promise<void>[] = [];
 
@@ -243,13 +312,15 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
       await addSaleRecordDB(newSale); // Add sale to DB
 
       setProducts(tempProducts); // Update products state
-      setSalesHistory(prev => [newSale, ...prev].sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())); // Update sales history state
+      setSalesHistory(prev => [newSale, ...prev].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())); // Update sales history state
       clearCart();
+      return true;
     } catch (error) {
-        console.error("Error recording sale or updating stock in DB:", error);
-        toast({ title: "Error en Venta 😟", description: "No se pudo registrar la venta o actualizar el stock.", variant: "destructive" });
+      console.error("Error recording sale or updating stock in DB:", error);
+      toast({ title: "Error en Venta 😟", description: "No se pudo registrar la venta o actualizar el stock.", variant: "destructive" });
+      return false;
     }
-  }, [cart, cartTotal, clearCart, products, toast]);
+  }, [accounts, cart, cartTotal, clearCart, products, toast]);
 
 
   const value = useMemo(() => ({
@@ -258,14 +329,18 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
     currentView, setCurrentView,
     salesHistory, recordSale,
     products, addProduct, updateProduct, deleteProduct,
-    isLoadingData
+    isLoadingData,
+    accounts, createAccount, topUpAccount,
+    cashierDifficulty, setCashierDifficulty
   }), [
     user, login, logout,
     cart, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal,
     currentView, setCurrentView,
     salesHistory, recordSale,
     products, addProduct, updateProduct, deleteProduct,
-    isLoadingData
+    isLoadingData,
+    accounts, createAccount, topUpAccount,
+    cashierDifficulty, setCashierDifficulty
   ]);
 
   return <KiddieMartContext.Provider value={value}>{children}</KiddieMartContext.Provider>;

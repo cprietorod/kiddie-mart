@@ -1,5 +1,5 @@
 
-"use client"; 
+"use client";
 
 import { KiddieMartProvider, useKiddieMart } from '@/context/KiddieMartContext';
 import { LoginScreen } from '@/components/kiddie-mart/LoginScreen';
@@ -32,17 +32,18 @@ function KiddieMartApp() {
     case 'admin_products':
     case 'admin_sales':
     case 'admin_reports':
+    case 'admin_wallets':
       viewComponent = <AdminDashboard />;
       break;
     default:
-      viewComponent = <LoginScreen />; 
+      viewComponent = <LoginScreen />;
   }
 
   return (
     <div className="min-h-screen flex flex-col">
       {user && <AppHeader />}
       <div className={`flex-grow ${user ? '' : 'h-screen'}`}>
-         {viewComponent}
+        {viewComponent}
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 
 'use client';
 
-import type { Product, SaleRecord } from '@/types/kiddieMart';
+import type { Product, SaleRecord, Account } from '@/types/kiddieMart';
 
 const DB_NAME = 'KiddieMartDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const PRODUCT_STORE_NAME = 'products';
 const SALES_HISTORY_STORE_NAME = 'salesHistory';
 
@@ -13,6 +13,7 @@ let db: IDBDatabase | null = null;
 interface Stores {
   [PRODUCT_STORE_NAME]: IDBObjectStore;
   [SALES_HISTORY_STORE_NAME]: IDBObjectStore;
+  accounts: IDBObjectStore;
 }
 
 export const openDB = (): Promise<IDBDatabase> => {
@@ -46,6 +47,10 @@ export const openDB = (): Promise<IDBDatabase> => {
         const salesStore = tempDb.createObjectStore(SALES_HISTORY_STORE_NAME, { keyPath: 'id' });
         salesStore.createIndex('timestamp', 'timestamp', { unique: false });
         console.log(`Object store "${SALES_HISTORY_STORE_NAME}" created.`);
+      }
+      if (!tempDb.objectStoreNames.contains('accounts')) {
+        tempDb.createObjectStore('accounts', { keyPath: 'id' });
+        console.log(`Object store "accounts" created.`);
       }
     };
   });
@@ -122,7 +127,7 @@ export const getAllSalesHistory = async (): Promise<SaleRecord[]> => {
   return new Promise((resolve, reject) => {
     const store = getStore(SALES_HISTORY_STORE_NAME, 'readonly');
     const request = store.getAll();
-    request.onsuccess = () => resolve((request.result as SaleRecord[]).sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
+    request.onsuccess = () => resolve((request.result as SaleRecord[]).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
     request.onerror = (event) => reject('Error fetching sales history: ' + (event.target as IDBRequest).error);
   });
 };
@@ -149,5 +154,38 @@ export const bulkAddSalesHistoryDB = async (sales: SaleRecord[]): Promise<void> 
     sales.forEach(sale => store.add(sale));
     transaction.oncomplete = () => resolve();
     transaction.onerror = (event) => reject('Error bulk adding sales history: ' + (event.target as IDBTransaction).error);
+  });
+};
+
+// Account Operations
+const ACCOUNTS_STORE_NAME = 'accounts';
+
+export const getAllAccounts = async (): Promise<Account[]> => {
+  await openDB();
+  return new Promise((resolve, reject) => {
+    const store = getStore(ACCOUNTS_STORE_NAME, 'readonly');
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result as Account[]);
+    request.onerror = (event) => reject('Error fetching accounts: ' + (event.target as IDBRequest).error);
+  });
+};
+
+export const addAccountDB = async (account: Account): Promise<Account> => {
+  await openDB();
+  return new Promise((resolve, reject) => {
+    const store = getStore(ACCOUNTS_STORE_NAME, 'readwrite');
+    const request = store.add(account);
+    request.onsuccess = () => resolve(account);
+    request.onerror = (event) => reject('Error adding account: ' + (event.target as IDBRequest).error);
+  });
+};
+
+export const updateAccountDB = async (account: Account): Promise<Account> => {
+  await openDB();
+  return new Promise((resolve, reject) => {
+    const store = getStore(ACCOUNTS_STORE_NAME, 'readwrite');
+    const request = store.put(account);
+    request.onsuccess = () => resolve(account);
+    request.onerror = (event) => reject('Error updating account: ' + (event.target as IDBRequest).error);
   });
 };
