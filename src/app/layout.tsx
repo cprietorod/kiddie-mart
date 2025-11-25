@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   themeColor: '#A7E6D1',
 };
 
+import NetworkStatus from '@/components/NetworkStatus';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +27,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body className={`${nunito.variable} font-sans antialiased`}> {/* Use Nunito font variable */}
         {children}
+        <NetworkStatus />
         <Toaster />
       </body>
     </html>

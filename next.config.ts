@@ -8,47 +8,14 @@ const withPWA = withPWAInit({
   disable: false, // Always enable PWA
   register: true,
   skipWaiting: true,
-  runtimeCaching: [
-    {
-      urlPattern: ({ request }) => request.mode === 'navigate',
-      handler: 'StaleWhileRevalidate',
-      options: {
-        cacheName: 'pages-cache',
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-        },
-      },
-    },
-    {
-      urlPattern: /\/_next\/static\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'next-static-cache',
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 31 * 24 * 60 * 60, // 31 Days
-        },
-      },
-    },
-    {
-      urlPattern: /^https:\/\/placehold\.co\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'images-cache',
-        expiration: {
-          maxEntries: 100, // Max number of images to cache
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-        },
-        cacheableResponse: {
-          statuses: [0, 200], // Cache opaque and successful responses
-        },
-      },
-    },
-  ],
+  // fallbacks: {
+  //   document: '/offline', // Fallback for document requests
+  // },
+  // runtimeCaching is handled by the default workbox config
 });
 
 const nextConfig: NextConfig = {
+  output: 'export',
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -57,6 +24,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
