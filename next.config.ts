@@ -14,8 +14,13 @@ const withPWA = withPWAInit({
   // runtimeCaching is handled by the default workbox config
 });
 
+const isProd = process.env.NODE_ENV === 'production';
+const repoName = 'mini-market';
+
 const nextConfig: NextConfig = {
   output: 'export',
+  basePath: isProd ? `/${repoName}` : '',
+  assetPrefix: isProd ? `/${repoName}` : '',
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
