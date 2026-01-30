@@ -8,6 +8,8 @@ import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import type { ChartConfig } from '@/components/ui/chart';
 import { TrendingUp, AlertCircle } from 'lucide-react';
 
+import { useTranslations } from 'next-intl';
+
 const CHART_COLORS = {
   sales: "hsl(var(--chart-1))",
   cash: "hsl(var(--chart-2))",
@@ -16,18 +18,18 @@ const CHART_COLORS = {
 
 const salesByDayConfig = {
   sales: {
-    label: "Ventas Diarias ($)",
+    label: "Sales ($)", // Will be dynamic, but config keys need to be static or updated via a component abstraction. For now, we will handle labels in the JSX.
     color: CHART_COLORS.sales,
   },
 } satisfies ChartConfig;
 
 const salesByPaymentMethodConfig = {
   Cash: {
-    label: "Efectivo ($)",
+    label: "Cash ($)",
     color: CHART_COLORS.cash,
   },
   Card: {
-    label: "Tarjeta ($)",
+    label: "Card ($)",
     color: CHART_COLORS.card,
   },
 } satisfies ChartConfig;
@@ -35,6 +37,7 @@ const salesByPaymentMethodConfig = {
 
 export function ReportsDashboardView() {
   const { salesHistory } = useKiddieMart();
+  const t = useTranslations('Admin.Reports');
 
   const salesByDay = useMemo(() => {
     const data = salesHistory.reduce((acc, sale) => {
@@ -53,14 +56,24 @@ export function ReportsDashboardView() {
 
   const salesByPaymentMethod = useMemo(() => {
     const data = salesHistory.reduce((acc, sale) => {
-      const paymentMethodLabel = sale.paymentMethod === 'Cash' ? 'Efectivo' : 'Tarjeta';
-      acc[paymentMethodLabel] = (acc[paymentMethodLabel] || 0) + sale.total;
+      // Use keys that match our config keys 'Cash' and 'Card' 
+      const methodKey = sale.paymentMethod === 'Cash' ? 'Cash' : 'Card';
+      acc[methodKey] = (acc[methodKey] || 0) + sale.total;
       return acc;
     }, {} as Record<string, number>);
-    return Object.entries(data).map(([name, value]) => ({ name, value }));
-  }, [salesHistory]);
 
-  const NoDataPlaceholder = ({ message = "¡Aún no hay suficientes datos para este gráfico! 📊" }) => (
+    // Map to translated names for display if needed, but the ChartConfig handles the legend. 
+    // Actually, Recharts with "name" key uses that for the legend.
+    // Let's use the translated names for the "name" property to show in Tooltip/Legend
+    return Object.entries(data).map(([key, value]) => ({
+      name: key === 'Cash' ? t('methodsChart.cash') : t('methodsChart.card'),
+      value,
+      // We keep the original key to match config if needed, but here we are using a custom cell map in the JSX anyway.
+      originalKey: key
+    }));
+  }, [salesHistory, t]);
+
+  const NoDataPlaceholder = ({ message = t('noData') }) => (
     <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-10">
       <AlertCircle className="h-12 w-12 text-primary/50 mb-3" />
       <p className="text-center">{message}</p>
@@ -70,14 +83,14 @@ export function ReportsDashboardView() {
   return (
     <div className="p-4 md:p-6 space-y-6">
       <h1 className="text-3xl font-bold text-primary flex items-center">
-        <TrendingUp className="mr-3 h-8 w-8 text-accent" /> Reportes de la Tienda
+        <TrendingUp className="mr-3 h-8 w-8 text-accent" /> {t('title')}
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="shadow-xl rounded-2xl">
           <CardHeader>
-            <CardTitle className="text-xl text-primary">Ventas a lo Largo del Tiempo</CardTitle>
-            <CardDescription className="text-muted-foreground">Ingresos generados cada día.</CardDescription>
+            <CardTitle className="text-xl text-primary">{t('salesChart.title')}</CardTitle>
+            <CardDescription className="text-muted-foreground">{t('salesChart.desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             {salesByDay.length > 0 ? (
@@ -91,11 +104,12 @@ export function ReportsDashboardView() {
                       content={<ChartTooltipContent
                         formatter={(value) => `$${Number(value).toFixed(2)}`}
                         indicator="dot"
+                        labelFormatter={(label) => label} // Just show date
                       />}
                       cursor={{ fill: "hsl(var(--accent)/0.1)" }}
                     />
                     <Legend />
-                    <Bar dataKey="sales" radius={[4, 4, 0, 0]}>
+                    <Bar dataKey="sales" radius={[4, 4, 0, 0]} name={t('salesChart.label')}>
                       {salesByDay.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={CHART_COLORS.sales} />
                       ))}
@@ -111,8 +125,8 @@ export function ReportsDashboardView() {
 
         <Card className="shadow-xl rounded-2xl">
           <CardHeader>
-            <CardTitle className="text-xl text-primary">Métodos de Pago</CardTitle>
-            <CardDescription className="text-muted-foreground">Cómo los clientes pagan por sus productos.</CardDescription>
+            <CardTitle className="text-xl text-primary">{t('methodsChart.title')}</CardTitle>
+            <CardDescription className="text-muted-foreground">{t('methodsChart.desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             {salesByPaymentMethod.length > 0 ? (
@@ -132,7 +146,7 @@ export function ReportsDashboardView() {
                     <Legend />
                     <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                       {salesByPaymentMethod.map((entry) => (
-                        <Cell key={`cell-${entry.name}`} fill={salesByPaymentMethodConfig[entry.name as keyof typeof salesByPaymentMethodConfig]?.color || CHART_COLORS.sales} />
+                        <Cell key={`cell-${entry.name}`} fill={entry.originalKey === 'Cash' ? CHART_COLORS.cash : CHART_COLORS.card} />
                       ))}
                     </Bar>
                   </RechartsBarChart>

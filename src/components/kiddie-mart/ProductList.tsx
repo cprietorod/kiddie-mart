@@ -10,25 +10,28 @@ import { Search, Filter } from 'lucide-react';
 import { MathChallengeModal } from './MathChallengeModal';
 import type { Product } from '@/types/kiddieMart';
 
+import { useProductLocalization } from '@/hooks/useProductLocalization';
+
 export function ProductList() {
   const { products, cashierDifficulty, addToCart, cartTotal } = useKiddieMart();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { getProductName, getProductCategory } = useProductLocalization();
 
   // Math Challenge State
   const [mathModalOpen, setMathModalOpen] = useState(false);
   const [pendingProduct, setPendingProduct] = useState<Product | null>(null);
   const [mathProblem, setMathProblem] = useState({ problem: '', answer: 0 });
 
-  const categories = useMemo(() => ['All', ...new Set(products.map(p => p.category))], [products]);
+  const categories = useMemo(() => ['All', ...new Set(products.map(p => getProductCategory(p)))], [products, getProductCategory]);
 
   const filteredProducts = useMemo(() => {
     return products.filter(product =>
-      (product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (selectedCategory === 'All' || product.category === selectedCategory)
+      (getProductName(product).toLowerCase().includes(searchTerm.toLowerCase()) ||
+        getProductCategory(product).toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (selectedCategory === 'All' || getProductCategory(product) === selectedCategory)
     );
-  }, [products, searchTerm, selectedCategory]);
+  }, [products, searchTerm, selectedCategory, getProductName, getProductCategory]);
 
   const handleProductClick = (product: Product) => {
     if (cashierDifficulty === 'primary') {

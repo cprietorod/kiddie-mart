@@ -9,12 +9,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Wallet, Plus, QrCode, DollarSign, CreditCard } from 'lucide-react';
 import Image from 'next/image';
 
+import { useTranslations } from 'next-intl';
+
 export function AdminWalletManagement() {
     const { accounts, createAccount, topUpAccount } = useKiddieMart();
     const [newAccountName, setNewAccountName] = useState('');
     const [initialBalance, setInitialBalance] = useState('');
     const [topUpAmount, setTopUpAmount] = useState('');
     const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
+    const t = useTranslations('Admin.Wallets');
 
     const handleCreateAccount = () => {
         if (newAccountName && initialBalance) {
@@ -36,38 +39,38 @@ export function AdminWalletManagement() {
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-bold text-primary flex items-center gap-2">
-                    <Wallet className="h-8 w-8" /> Gestión de Billeteras
+                    <Wallet className="h-8 w-8" /> {t('title')}
                 </h2>
 
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button className="bg-green-500 hover:bg-green-600 text-white">
-                            <Plus className="mr-2 h-4 w-4" /> Nueva Billetera
+                            <Plus className="mr-2 h-4 w-4" /> {t('newWallet')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Crear Nueva Billetera</DialogTitle>
+                            <DialogTitle>{t('createTitle')}</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <Label>Nombre del Niño/a</Label>
+                                <Label>{t('labels.name')}</Label>
                                 <Input
                                     value={newAccountName}
                                     onChange={(e) => setNewAccountName(e.target.value)}
-                                    placeholder="Ej: Sofía"
+                                    placeholder={t('placeholders.name')}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Saldo Inicial ($)</Label>
+                                <Label>{t('labels.initialBalance')}</Label>
                                 <Input
                                     type="number"
                                     value={initialBalance}
                                     onChange={(e) => setInitialBalance(e.target.value)}
-                                    placeholder="Ej: 50.00"
+                                    placeholder={t('placeholders.balance')}
                                 />
                             </div>
-                            <Button onClick={handleCreateAccount} className="w-full">Crear Cuenta</Button>
+                            <Button onClick={handleCreateAccount} className="w-full">{t('createAction')}</Button>
                         </div>
                     </DialogContent>
                 </Dialog>
@@ -87,7 +90,7 @@ export function AdminWalletManagement() {
                         </CardHeader>
                         <CardContent className="p-6 text-center">
                             <div className="mb-4">
-                                <p className="text-sm text-muted-foreground">Saldo Actual</p>
+                                <p className="text-sm text-muted-foreground">{t('currentBalance')}</p>
                                 <p className="text-4xl font-bold text-green-600">${account.balance.toFixed(2)}</p>
                             </div>
 
@@ -102,31 +105,31 @@ export function AdminWalletManagement() {
                                     />
                                 </div>
                             </div>
-                            <p className="text-xs text-muted-foreground mb-4">Escanea este código para pagar</p>
+                            <p className="text-xs text-muted-foreground mb-4">{t('scanText')}</p>
 
                             <div className="flex gap-2">
                                 <Dialog>
                                     <DialogTrigger asChild>
                                         <Button variant="outline" className="w-full" onClick={() => setSelectedAccount(account.id)}>
-                                            <DollarSign className="mr-2 h-4 w-4" /> Recargar
+                                            <DollarSign className="mr-2 h-4 w-4" /> {t('topUp')}
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
-                                            <DialogTitle>Recargar Billetera de {account.name}</DialogTitle>
+                                            <DialogTitle>{t('topUpTitle', { name: account.name })}</DialogTitle>
                                         </DialogHeader>
                                         <div className="space-y-4 py-4">
                                             <div className="space-y-2">
-                                                <Label>Monto a Recargar ($)</Label>
+                                                <Label>{t('labels.topUpAmount')}</Label>
                                                 <Input
                                                     type="number"
                                                     value={topUpAmount}
                                                     onChange={(e) => setTopUpAmount(e.target.value)}
-                                                    placeholder="Ej: 10.00"
+                                                    placeholder={t('placeholders.topUp')}
                                                 />
                                             </div>
                                             <Button onClick={() => handleTopUp(account.id)} className="w-full bg-green-500 hover:bg-green-600">
-                                                Confirmar Recarga
+                                                {t('confirmTopUp')}
                                             </Button>
                                         </div>
                                     </DialogContent>
@@ -139,8 +142,8 @@ export function AdminWalletManagement() {
                 {accounts.length === 0 && (
                     <div className="col-span-full text-center p-12 border-2 border-dashed rounded-xl text-muted-foreground">
                         <Wallet className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p>No hay billeteras creadas aún.</p>
-                        <p className="text-sm">Crea una nueva para empezar.</p>
+                        <p>{t('empty')}</p>
+                        <p className="text-sm">{t('emptySub')}</p>
                     </div>
                 )}
             </div>

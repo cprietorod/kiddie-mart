@@ -1,4 +1,3 @@
-
 "use client";
 
 import { KiddieMartProvider, useKiddieMart } from '@/context/KiddieMartContext';
@@ -7,15 +6,17 @@ import { StaffPOSInterface } from '@/components/kiddie-mart/StaffPOSInterface';
 import { AdminDashboard } from '@/components/kiddie-mart/admin/AdminDashboard';
 import { AppHeader } from '@/components/kiddie-mart/AppHeader';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 function KiddieMartApp() {
+  const t = useTranslations('HomePage');
   const { currentView, user, isLoadingData } = useKiddieMart();
 
-  if (isLoadingData && currentView === 'login') { // Show loading screen only if not logged in yet and data is loading
+  if (isLoadingData && currentView === 'login') {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background">
         <Loader2 className="h-16 w-16 text-primary animate-spin" />
-        <p className="mt-4 text-lg text-muted-foreground">Cargando datos de la tienda...</p>
+        <p className="mt-4 text-lg text-muted-foreground">{t('loading')}</p>
       </div>
     );
   }
@@ -49,7 +50,7 @@ function KiddieMartApp() {
   );
 }
 
-export default function HomePage() {
+export default function HomePageContent() {
   return (
     <KiddieMartProvider>
       <KiddieMartApp />

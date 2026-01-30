@@ -4,7 +4,7 @@ import { WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-export default function OfflinePage() {
+export default function OfflineContent() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 text-center">
             <div className="bg-muted p-6 rounded-full mb-6">

@@ -8,6 +8,8 @@ import { ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { useProductLocalization } from '@/hooks/useProductLocalization';
+
 interface ProductItemProps {
   product: Product;
   onAddToCart?: () => void;
@@ -16,6 +18,7 @@ interface ProductItemProps {
 export function ProductItem({ product, onAddToCart }: ProductItemProps) {
   const { addToCart } = useKiddieMart();
   const [isAdding, setIsAdding] = useState(false);
+  const { getProductName, getProductCategory } = useProductLocalization();
 
   const handleAddToCart = () => {
     if (onAddToCart) {
@@ -33,17 +36,17 @@ export function ProductItem({ product, onAddToCart }: ProductItemProps) {
         {(product.image && (product.image.startsWith('http://') || product.image.startsWith('https://'))) ? (
           <Image
             src={product.image}
-            alt={product.name}
+            alt={getProductName(product)}
             width={150}
             height={150}
             className="mx-auto mb-3 rounded-lg object-cover aspect-square"
             data-ai-hint={product.dataAiHint}
           />
         ) : (
-          <div className="text-6xl md:text-7xl mb-3" role="img" aria-label={product.category}>{product.emoji}</div>
+          <div className="text-6xl md:text-7xl mb-3" role="img" aria-label={getProductCategory(product)}>{product.emoji}</div>
         )}
-        <CardTitle className="text-base md:text-lg font-semibold leading-tight">{product.name}</CardTitle>
-        <CardDescription className="text-xs md:text-sm">{product.category}</CardDescription>
+        <CardTitle className="text-base md:text-lg font-semibold leading-tight">{getProductName(product)}</CardTitle>
+        <CardDescription className="text-xs md:text-sm">{getProductCategory(product)}</CardDescription>
       </CardHeader>
       <CardContent className="pt-0 pb-2 md:pb-3 text-center">
         <p className="text-xl md:text-2xl font-bold text-primary-foreground">${product.price.toFixed(2)}</p>

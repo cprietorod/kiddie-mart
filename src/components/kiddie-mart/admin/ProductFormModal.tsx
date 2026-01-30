@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useTranslations } from 'next-intl';
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -17,10 +18,11 @@ interface ProductFormModalProps {
 export function ProductFormModal({ isOpen, onClose, productToEdit, onSave }: ProductFormModalProps) {
   const [formData, setFormData] = useState<Partial<Product>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const t = useTranslations('Admin.ProductForm');
 
   useEffect(() => {
     if (isOpen) {
-      setFormData(productToEdit || { name: '', price: 0, category: '', stock: 0, emoji: '', image: '', dataAiHint: '' });
+      setFormData(productToEdit || { name: '', name_en: '', price: 0, category: '', category_en: '', stock: 0, emoji: '', image: '', dataAiHint: '' });
       setErrors({});
     }
   }, [isOpen, productToEdit]);
@@ -33,19 +35,16 @@ export function ProductFormModal({ isOpen, onClose, productToEdit, onSave }: Pro
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name?.trim()) newErrors.name = "El nombre del producto es obligatorio.";
+    if (!formData.name?.trim()) newErrors.name = t('errors.name');
     if (!formData.price || isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
-      newErrors.price = "Se necesita un precio válido (número positivo).";
+      newErrors.price = t('errors.price');
     }
-    if (!formData.category?.trim()) newErrors.category = "La categoría es obligatoria.";
+    if (!formData.category?.trim()) newErrors.category = t('errors.category');
     const stockValue = parseInt(String(formData.stock), 10);
     if (isNaN(stockValue) || stockValue < 0) {
-      newErrors.stock = "Introduce una cantidad válida (0 o más).";
+      newErrors.stock = t('errors.stock');
     }
-    if (!formData.emoji?.trim()) newErrors.emoji = "Elige un emoji para el producto.";
-    if (formData.image && !formData.image.startsWith('https://placehold.co/')) {
-        // Basic check for placeholder, can be expanded
-    }
+    if (!formData.emoji?.trim()) newErrors.emoji = t('errors.emoji');
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -59,7 +58,9 @@ export function ProductFormModal({ isOpen, onClose, productToEdit, onSave }: Pro
 
       const commonData = {
         name: formData.name || '',
+        name_en: formData.name_en?.trim() || undefined,
         category: formData.category || '',
+        category_en: formData.category_en?.trim() || undefined,
         price: isNaN(priceNum) ? 0 : priceNum,
         stock: isNaN(stockNum) ? 0 : stockNum,
         emoji: formData.emoji || '',
@@ -67,20 +68,20 @@ export function ProductFormModal({ isOpen, onClose, productToEdit, onSave }: Pro
         dataAiHint: formData.dataAiHint?.trim() || undefined,
       };
 
-      if (productToEdit && formData.id) { 
+      if (productToEdit && formData.id) {
         const dataToSave: Product = {
           ...commonData,
-          id: formData.id, 
+          id: formData.id,
         };
         onSave(dataToSave);
-      } else { 
+      } else {
         const dataToSave: Omit<Product, 'id'> = commonData;
         onSave(dataToSave);
       }
       onClose();
     }
   };
-  
+
   const handleModalOpenChange = (open: boolean) => {
     if (!open) {
       onClose();
@@ -89,56 +90,67 @@ export function ProductFormModal({ isOpen, onClose, productToEdit, onSave }: Pro
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-background rounded-2xl">
+      <DialogContent className="sm:max-w-lg bg-background rounded-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="text-2xl font-bold text-primary">
-            {productToEdit ? '¡Editar Este Producto!' : '¡Añadir un Nuevo Producto!'}
+            {productToEdit ? t('editTitle') : t('addTitle')}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-4">
           <div className="space-y-1">
-            <Label htmlFor="name" className="text-foreground/80">Nombre del Producto</Label>
-            <Input name="name" value={formData.name || ''} onChange={handleChange} placeholder="ej: Manzana Fuji" aria-required="true" className="rounded-lg h-11 focus:ring-accent"/>
+            <Label htmlFor="name" className="text-foreground/80">{t('labels.name')}</Label>
+            <Input name="name" value={formData.name || ''} onChange={handleChange} placeholder={t('placeholders.name')} aria-required="true" className="rounded-lg h-11 focus:ring-accent" />
             {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
           </div>
+          <div className="space-y-1">
+            <Label htmlFor="name_en" className="text-foreground/80">{t('labels.nameEn')}</Label>
+            <Input name="name_en" value={formData.name_en || ''} onChange={handleChange} placeholder={t('placeholders.nameEn')} className="rounded-lg h-11 focus:ring-accent" />
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label htmlFor="price" className="text-foreground/80">Precio ($)</Label>
-              <Input name="price" type="number" value={formData.price || ''} onChange={handleChange} placeholder="ej: 0.75" step="0.01" min="0.01" aria-required="true" className="rounded-lg h-11 focus:ring-accent"/>
+              <Label htmlFor="price" className="text-foreground/80">{t('labels.price')}</Label>
+              <Input name="price" type="number" value={formData.price || ''} onChange={handleChange} placeholder={t('placeholders.price')} step="0.01" min="0.01" aria-required="true" className="rounded-lg h-11 focus:ring-accent" />
               {errors.price && <p className="text-destructive text-xs mt-1">{errors.price}</p>}
             </div>
             <div className="space-y-1">
-              <Label htmlFor="stock" className="text-foreground/80">Cantidad en Stock</Label>
-              <Input name="stock" type="number" value={formData.stock || ''} onChange={handleChange} placeholder="ej: 150" min="0" step="1" aria-required="true" className="rounded-lg h-11 focus:ring-accent"/>
+              <Label htmlFor="stock" className="text-foreground/80">{t('labels.stock')}</Label>
+              <Input name="stock" type="number" value={formData.stock || ''} onChange={handleChange} placeholder={t('placeholders.stock')} min="0" step="1" aria-required="true" className="rounded-lg h-11 focus:ring-accent" />
               {errors.stock && <p className="text-destructive text-xs mt-1">{errors.stock}</p>}
             </div>
           </div>
+
           <div className="space-y-1">
-            <Label htmlFor="category" className="text-foreground/80">Categoría del Producto</Label>
-            <Input name="category" value={formData.category || ''} onChange={handleChange} placeholder="ej: Frutas" aria-required="true" className="rounded-lg h-11 focus:ring-accent"/>
+            <Label htmlFor="category" className="text-foreground/80">{t('labels.category')}</Label>
+            <Input name="category" value={formData.category || ''} onChange={handleChange} placeholder={t('placeholders.category')} aria-required="true" className="rounded-lg h-11 focus:ring-accent" />
             {errors.category && <p className="text-destructive text-xs mt-1">{errors.category}</p>}
           </div>
-           <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <Label htmlFor="category_en" className="text-foreground/80">{t('labels.categoryEn')}</Label>
+            <Input name="category_en" value={formData.category_en || ''} onChange={handleChange} placeholder={t('placeholders.categoryEn')} className="rounded-lg h-11 focus:ring-accent" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label htmlFor="emoji" className="text-foreground/80">Ícono Emoji</Label>
-              <Input name="emoji" value={formData.emoji || ''} onChange={handleChange} placeholder="ej: 🍎" maxLength={4} aria-required="true" className="rounded-lg h-11 focus:ring-accent"/>
+              <Label htmlFor="emoji" className="text-foreground/80">{t('labels.emoji')}</Label>
+              <Input name="emoji" value={formData.emoji || ''} onChange={handleChange} placeholder={t('placeholders.emoji')} maxLength={4} aria-required="true" className="rounded-lg h-11 focus:ring-accent" />
               {errors.emoji && <p className="text-destructive text-xs mt-1">{errors.emoji}</p>}
             </div>
-             <div className="space-y-1">
-                <Label htmlFor="dataAiHint" className="text-foreground/80">Pista de Imagen (Opcional)</Label>
-                <Input name="dataAiHint" value={formData.dataAiHint || ''} onChange={handleChange} placeholder="ej: manzana roja" className="rounded-lg h-11 focus:ring-accent"/>
+            <div className="space-y-1">
+              <Label htmlFor="dataAiHint" className="text-foreground/80">{t('labels.aiHint')}</Label>
+              <Input name="dataAiHint" value={formData.dataAiHint || ''} onChange={handleChange} placeholder={t('placeholders.aiHint')} className="rounded-lg h-11 focus:ring-accent" />
             </div>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="image" className="text-foreground/80">URL de Imagen (Opcional)</Label>
-            <Input name="image" value={formData.image || ''} onChange={handleChange} placeholder="https://placehold.co/300x300..." className="rounded-lg h-11 focus:ring-accent"/>
-             {errors.image && <p className="text-destructive text-xs mt-1">{errors.image}</p>}
+            <Label htmlFor="image" className="text-foreground/80">{t('labels.image')}</Label>
+            <Input name="image" value={formData.image || ''} onChange={handleChange} placeholder={t('placeholders.image')} className="rounded-lg h-11 focus:ring-accent" />
+            {errors.image && <p className="text-destructive text-xs mt-1">{errors.image}</p>}
           </div>
           <DialogFooter className="pt-6">
             <DialogClose asChild>
-              <Button type="button" variant="outline" className="rounded-lg text-base py-2.5">Cancelar</Button>
+              <Button type="button" variant="outline" className="rounded-lg text-base py-2.5">{t('cancel')}</Button>
             </DialogClose>
-            <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-lg text-base py-2.5">{productToEdit ? 'Guardar Producto' : 'Añadir Producto'}</Button>
+            <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-lg text-base py-2.5">{productToEdit ? t('save') : t('add')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

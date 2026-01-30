@@ -7,8 +7,9 @@ import { ProductManagement } from './ProductManagement';
 import { SalesHistoryView } from './SalesHistoryView';
 import { AdminWalletManagement } from './AdminWalletManagement';
 import { ReportsDashboardView } from './ReportsDashboardView';
-import { LayoutDashboard, Package, ReceiptText, LineChart, ShoppingBasket, Sparkles, Wallet } from 'lucide-react'; // Changed ToyBrick to ShoppingBasket
+import { LayoutDashboard, Package, ReceiptText, LineChart, ShoppingBasket, Sparkles, Wallet } from 'lucide-react';
 import type { AppView } from '@/types/kiddieMart';
+import { useTranslations } from 'next-intl';
 
 interface NavItemProps {
   view: AppView;
@@ -35,6 +36,7 @@ const NavItem: React.FC<NavItemProps> = ({ view, currentView, setView, icon, lab
 
 export function AdminDashboard() {
   const { currentView, setCurrentView } = useKiddieMart();
+  const t = useTranslations('Admin.Dashboard');
 
   let content;
   switch (currentView) {
@@ -55,9 +57,9 @@ export function AdminDashboard() {
       content = (
         <div className="p-6 md:p-10 flex flex-col items-center justify-center text-center h-full">
           <ShoppingBasket className="h-24 w-24 text-accent mb-6 animate-bounce" />
-          <h1 className="text-4xl font-bold text-primary mb-3">¡Bienvenido/a, Gerente!</h1>
+          <h1 className="text-4xl font-bold text-primary mb-3">{t('welcome')}</h1>
           <p className="text-lg text-muted-foreground max-w-md">
-            Este es tu centro de control para todos los productos en Mini Market. Elige una opción del menú para empezar.
+            {t('welcomeSub')}
           </p>
         </div>
       );
@@ -67,19 +69,19 @@ export function AdminDashboard() {
     <div className="flex h-screen pt-16 bg-muted/40">
       <nav className="w-64 bg-sidebar text-sidebar-foreground flex flex-col flex-shrink-0 shadow-2xl">
         <div className="p-5 text-2xl font-bold border-b border-sidebar-border flex items-center gap-2">
-          <Sparkles className="h-7 w-7 text-sidebar-primary" /> Admin Mini Market
+          <Sparkles className="h-7 w-7 text-sidebar-primary" /> {t('title')}
         </div>
         <ScrollArea className="flex-grow">
           <ul className="p-3 space-y-2">
-            <NavItem view="admin_dashboard" currentView={currentView} setView={setCurrentView} icon={<LayoutDashboard className="mr-3 h-6 w-6" />} label="Panel Principal" />
-            <NavItem view="admin_products" currentView={currentView} setView={setCurrentView} icon={<Package className="mr-3 h-6 w-6" />} label="Lista de Productos" />
-            <NavItem view="admin_sales" currentView={currentView} setView={setCurrentView} icon={<ReceiptText className="mr-3 h-6 w-6" />} label="Historial de Ventas" />
-            <NavItem view="admin_reports" currentView={currentView} setView={setCurrentView} icon={<LineChart className="mr-3 h-6 w-6" />} label="Reportes" />
-            <NavItem view="admin_wallets" currentView={currentView} setView={setCurrentView} icon={<Wallet className="mr-3 h-6 w-6" />} label="Billeteras / Cuentas" />
+            <NavItem view="admin_dashboard" currentView={currentView} setView={setCurrentView} icon={<LayoutDashboard className="mr-3 h-6 w-6" />} label={t('mainPanel')} />
+            <NavItem view="admin_products" currentView={currentView} setView={setCurrentView} icon={<Package className="mr-3 h-6 w-6" />} label={t('productList')} />
+            <NavItem view="admin_sales" currentView={currentView} setView={setCurrentView} icon={<ReceiptText className="mr-3 h-6 w-6" />} label={t('salesHistory')} />
+            <NavItem view="admin_reports" currentView={currentView} setView={setCurrentView} icon={<LineChart className="mr-3 h-6 w-6" />} label={t('reports')} />
+            <NavItem view="admin_wallets" currentView={currentView} setView={setCurrentView} icon={<Wallet className="mr-3 h-6 w-6" />} label={t('wallets')} />
           </ul>
         </ScrollArea>
         <div className="p-4 border-t border-sidebar-border text-center text-xs text-sidebar-foreground/70">
-          Admin Mini Market v1.0
+          {t('subtitle')}
         </div>
       </nav>
       <main className="flex-1 bg-background overflow-y-auto">

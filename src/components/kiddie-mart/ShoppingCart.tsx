@@ -1,6 +1,6 @@
 
 "use client";
-import { useState }  from 'react';
+import { useState } from 'react';
 import { useKiddieMart } from '@/context/KiddieMartContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,9 +9,12 @@ import { ShoppingCartIcon, Trash2, Plus, Minus } from 'lucide-react';
 import { PaymentModal } from './PaymentModal';
 import Image from 'next/image';
 
+import { useProductLocalization } from '@/hooks/useProductLocalization';
+
 export function ShoppingCart() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartTotal } = useKiddieMart();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const { getProductName, getProductCategory } = useProductLocalization(); // Added hook usage, actually we only need name here but consistency is good
 
   return (
     <div className="h-full flex flex-col bg-muted border-l border-border rounded-r-2xl shadow-inner">
@@ -38,21 +41,21 @@ export function ShoppingCart() {
             cart.map(item => (
               <div key={item.product.id} className="flex items-center bg-card p-3 rounded-xl shadow-md hover:shadow-lg transition-shadow">
                 <div className="w-16 h-16 relative mr-3 flex-shrink-0">
-                 {(item.product.image && (item.product.image.startsWith('http://') || item.product.image.startsWith('https://'))) ? (
-                    <Image 
-                        src={item.product.image} 
-                        alt={item.product.name} 
-                        fill 
-                        sizes="64px"
-                        className="rounded-md object-cover"
-                        data-ai-hint={item.product.dataAiHint} 
+                  {(item.product.image && (item.product.image.startsWith('http://') || item.product.image.startsWith('https://'))) ? (
+                    <Image
+                      src={item.product.image}
+                      alt={getProductName(item.product)}
+                      fill
+                      sizes="64px"
+                      className="rounded-md object-cover"
+                      data-ai-hint={item.product.dataAiHint}
                     />
                   ) : (
-                    <span className="text-4xl flex items-center justify-center w-full h-full bg-primary/10 rounded-md" role="img" aria-label={item.product.category}>{item.product.emoji}</span>
+                    <span className="text-4xl flex items-center justify-center w-full h-full bg-primary/10 rounded-md" role="img" aria-label={getProductCategory(item.product)}>{item.product.emoji}</span>
                   )}
                 </div>
                 <div className="flex-grow">
-                  <p className="font-semibold text-sm leading-tight">{item.product.name}</p>
+                  <p className="font-semibold text-sm leading-tight">{getProductName(item.product)}</p>
                   <p className="text-xs text-muted-foreground">${item.product.price.toFixed(2)} x {item.quantity}</p>
                 </div>
                 <div className="flex items-center space-x-1 mx-2">
@@ -73,17 +76,17 @@ export function ShoppingCart() {
           )}
         </CardContent>
       </ScrollArea>
-      
+
       <CardFooter className="p-4 border-t border-border bg-background/70 backdrop-blur-sm mt-auto">
         <div className="w-full">
           <div className="flex justify-between items-center mb-3">
             <span className="text-lg font-semibold text-foreground">Total:</span>
             <span className="text-2xl font-bold text-primary">${cartTotal.toFixed(2)}</span>
           </div>
-          <Button 
-            size="lg" 
-            className="w-full text-lg py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg focus:ring-primary" 
-            onClick={() => setIsPaymentModalOpen(true)} 
+          <Button
+            size="lg"
+            className="w-full text-lg py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg focus:ring-primary"
+            onClick={() => setIsPaymentModalOpen(true)}
             disabled={cart.length === 0}
           >
             ¡Hora de Pagar! 🛍️

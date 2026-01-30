@@ -1,4 +1,3 @@
-
 "use client";
 import { useKiddieMart } from '@/context/KiddieMartContext';
 import { Button } from '@/components/ui/button';
@@ -7,12 +6,18 @@ import { User, UserCog, Zap, Baby, School } from 'lucide-react';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export function LoginScreen() {
   const { login, cashierDifficulty, setCashierDifficulty } = useKiddieMart();
+  const t = useTranslations('LoginScreen');
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-background to-blue-200 p-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <Card className="w-full max-w-md shadow-2xl rounded-3xl overflow-hidden transform transition-all hover:scale-105 duration-300">
         <CardHeader className="bg-primary text-primary-foreground p-8 text-center">
           <Image
@@ -28,13 +33,13 @@ export function LoginScreen() {
             Mini Market
           </CardTitle>
           <CardDescription className="text-primary-foreground/80 text-lg mt-2">
-            ¡Bienvenido/a! Gestiona tu tienda fácilmente.
+            {t('welcome')}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-8 space-y-6">
 
           <div className="bg-muted/50 p-4 rounded-xl space-y-3">
-            <Label className="text-base font-semibold text-muted-foreground">Elige tu nivel:</Label>
+            <Label className="text-base font-semibold text-muted-foreground">{t('select_level')}</Label>
             <RadioGroup
               defaultValue={cashierDifficulty}
               onValueChange={(val) => setCashierDifficulty(val as 'preschool' | 'primary')}
@@ -47,7 +52,7 @@ export function LoginScreen() {
                   className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:text-primary cursor-pointer transition-all"
                 >
                   <Baby className="mb-2 h-6 w-6" />
-                  Prescolar
+                  {t('level_preschool')}
                 </Label>
               </div>
               <div>
@@ -57,7 +62,7 @@ export function LoginScreen() {
                   className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:text-primary cursor-pointer transition-all"
                 >
                   <School className="mb-2 h-6 w-6" />
-                  Primaria
+                  {t('level_primary')}
                 </Label>
               </div>
             </RadioGroup>
@@ -68,7 +73,7 @@ export function LoginScreen() {
             size="lg"
             className="w-full text-xl py-8 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200"
           >
-            <User className="mr-3 h-8 w-8" /> ¡Soy Cajero/a!
+            <User className="mr-3 h-8 w-8" /> {t('btn_cashier')}
           </Button>
           <Button
             onClick={() => login('admin')}
@@ -76,12 +81,12 @@ export function LoginScreen() {
             size="lg"
             className="w-full text-xl py-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-200"
           >
-            <UserCog className="mr-3 h-8 w-8" /> ¡Soy el/la Gerente!
+            <UserCog className="mr-3 h-8 w-8" /> {t('btn_admin')}
           </Button>
         </CardContent>
       </Card>
       <p className="mt-8 text-center text-foreground/70">
-        Mini Market - ¡Tu tienda amiga!
+        {t('footer')}
       </p>
     </div>
   );

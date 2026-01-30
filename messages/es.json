@@ -1,0 +1,154 @@
+{
+    "HomePage": {
+        "loading": "Cargando datos de la tienda...",
+        "title": "Kiddie Mart"
+    },
+    "AppHeader": {
+        "title": "Mini Market",
+        "welcome": "¡Hola, <span_variable>{name}</span_variable>!",
+        "role_admin": "Admin",
+        "role_cashier": "Cajero/a",
+        "logout": "Cerrar Sesión"
+    },
+    "LoginScreen": {
+        "welcome": "¡Bienvenido/a! Gestiona tu tienda fácilmente.",
+        "select_level": "Elige tu nivel:",
+        "level_preschool": "Prescolar",
+        "level_primary": "Primaria",
+        "btn_cashier": "¡Soy Cajero/a!",
+        "btn_admin": "¡Soy el/la Gerente!",
+        "footer": "Mini Market - ¡Tu tienda amiga!"
+    },
+    "Auth": {
+        "login": "Iniciar Sesión",
+        "logout": "Cerrar Sesión"
+    },
+    "Common": {
+        "save": "Guardar",
+        "cancel": "Cancelar"
+    },
+    "LanguageSwitcher": {
+        "label": "Idioma"
+    },
+    "Admin": {
+        "Dashboard": {
+            "title": "Admin Mini Market",
+            "subtitle": "Admin Mini Market v1.0",
+            "mainPanel": "Panel Principal",
+            "productList": "Lista de Productos",
+            "salesHistory": "Historial de Ventas",
+            "reports": "Reportes",
+            "wallets": "Billeteras / Cuentas",
+            "welcome": "¡Bienvenido/a, Gerente!",
+            "welcomeSub": "Este es tu centro de control para todos los productos en Mini Market. Elige una opción del menú para empezar."
+        },
+        "Products": {
+            "title": "Gestor de Productos",
+            "addNew": "Añadir Nuevo Producto",
+            "listTitle": "Lista de Productos",
+            "headers": {
+                "icon": "Ícono",
+                "name": "Nombre del Producto",
+                "category": "Categoría",
+                "price": "Precio",
+                "stock": "Stock",
+                "actions": "Acciones"
+            },
+            "actions": {
+                "edit": "Editar",
+                "delete": "Eliminar",
+                "confirmDelete": "¿Estás seguro/a de que quieres quitar este producto de la tienda?"
+            },
+            "empty": "¡Aún no hay productos aquí! ¡Vamos a añadir algunos! 🛒✨"
+        },
+        "ProductForm": {
+            "editTitle": "¡Editar Este Producto!",
+            "addTitle": "¡Añadir un Nuevo Producto!",
+            "labels": {
+                "name": "Nombre del Producto (Español)",
+                "nameEn": "Nombre (Inglés) - Opcional",
+                "price": "Precio ($)",
+                "stock": "Cantidad en Stock",
+                "category": "Categoría (Español)",
+                "categoryEn": "Categoría (Inglés) - Opcional",
+                "emoji": "Ícono Emoji",
+                "aiHint": "Pista de Imagen (Opcional)",
+                "image": "URL de Imagen (Opcional)"
+            },
+            "placeholders": {
+                "name": "ej: Manzana Fuji",
+                "nameEn": "ej: Fuji Apple",
+                "price": "ej: 0.75",
+                "stock": "ej: 150",
+                "category": "ej: Frutas",
+                "categoryEn": "ej: Fruits",
+                "emoji": "ej: 🍎",
+                "aiHint": "ej: manzana roja",
+                "image": "https://placehold.co/300x300..."
+            },
+            "errors": {
+                "name": "El nombre del producto es obligatorio.",
+                "price": "Se necesita un precio válido (número positivo).",
+                "stock": "Introduce una cantidad válida (0 o más).",
+                "category": "La categoría es obligatoria.",
+                "emoji": "Elige un emoji para el producto."
+            },
+            "cancel": "Cancelar",
+            "save": "Guardar Producto",
+            "add": "Añadir Producto"
+        },
+        "Wallets": {
+            "title": "Gestión de Billeteras",
+            "newWallet": "Nueva Billetera",
+            "createTitle": "Crear Nueva Billetera",
+            "labels": {
+                "name": "Nombre del Niño/a",
+                "initialBalance": "Saldo Inicial ($)",
+                "topUpAmount": "Monto a Recargar ($)"
+            },
+            "placeholders": {
+                "name": "Ej: Sofía",
+                "balance": "Ej: 50.00",
+                "topUp": "Ej: 10.00"
+            },
+            "createAction": "Crear Cuenta",
+            "currentBalance": "Saldo Actual",
+            "scanText": "Escanea este código para pagar",
+            "topUp": "Recargar",
+            "topUpTitle": "Recargar Billetera de {name}",
+            "confirmTopUp": "Confirmar Recarga",
+            "empty": "No hay billeteras creadas aún.",
+            "emptySub": "Crea una nueva para empezar."
+        },
+        "Sales": {
+            "title": "Historial de Ventas",
+            "listTitle": "Todas las Transacciones",
+            "headers": {
+                "date": "Fecha y Hora",
+                "items": "Artículos",
+                "payment": "Pago",
+                "total": "Total"
+            },
+            "methods": {
+                "card": "Tarjeta",
+                "cash": "Efectivo"
+            },
+            "empty": "¡Aún no se han registrado ventas! ¡Hagamos algunas! 💰🚀"
+        },
+        "Reports": {
+            "title": "Reportes de la Tienda",
+            "salesChart": {
+                "title": "Ventas a lo Largo del Tiempo",
+                "desc": "Ingresos generados cada día.",
+                "label": "Ventas Diarias ($)"
+            },
+            "methodsChart": {
+                "title": "Métodos de Pago",
+                "desc": "Cómo los clientes pagan por sus productos.",
+                "cash": "Efectivo ($)",
+                "card": "Tarjeta ($)"
+            },
+            "noData": "¡Aún no hay suficientes datos para este gráfico! 📊"
+        }
+    }
+}
