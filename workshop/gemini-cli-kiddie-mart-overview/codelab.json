@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:39:52-05:00",
+  "id": "gemini-cli-kiddie-mart-overview",
+  "duration": 5,
+  "title": "Gemini CLI Workshop: Aprende a Programar con AI usando Kiddie Mart",
+  "authors": "Carlos Prieto",
+  "summary": "Visión general del workshop de Gemini CLI con Kiddie Mart",
+  "source": "00-overview.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "gemini-cli-kiddie-mart-overview"
+}

@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:45:15-05:00",
+  "id": "feature-themes",
+  "duration": 6,
+  "title": "Reto 9: Nueva Feature — Soporte de Temas",
+  "authors": "Carlos Prieto",
+  "summary": "Implementar un sistema de temas visuales con selector en el header",
+  "source": "09-feature-themes.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools",
+    "frontend"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "feature-themes"
+}

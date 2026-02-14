@@ -1,0 +1,28 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:46:01-05:00",
+  "id": "feature-firebase",
+  "duration": 7,
+  "title": "Reto 11: Nueva Feature — Guardar Datos en Firebase",
+  "authors": "Carlos Prieto",
+  "summary": "Migrar el almacenamiento de IndexedDB a Firebase Firestore",
+  "source": "11-feature-firebase.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools",
+    "firebase",
+    "cloud"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "feature-firebase"
+}

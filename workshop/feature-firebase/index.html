@@ -1,0 +1,289 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Reto 11: Nueva Feature — Guardar Datos en Firebase</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="feature-firebase"
+                  title="Reto 11: Nueva Feature — Guardar Datos en Firebase"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Introducción" duration="1">
+        <p>En el último reto del workshop, vas a migrar el almacenamiento de datos de <strong>IndexedDB</strong> (local) a <strong>Firebase Firestore</strong> (cloud). Esto permite que los datos se compartan entre dispositivos y se persistan en la nube.</p>
+<h2 is-upgraded>Lo que construirás</h2>
+<ul>
+<li>Configuración de <strong>Firebase</strong> en el proyecto</li>
+<li>Servicio de <strong>Firestore</strong> que replique las funciones de IndexedDB</li>
+<li><strong>Migración</strong> del contexto para usar el nuevo servicio</li>
+<li><strong>Fallback</strong> a IndexedDB cuando Firebase no esté disponible</li>
+</ul>
+<h2 is-upgraded>Lo que aprenderás</h2>
+<ul>
+<li>Cómo migrar entre servicios de almacenamiento con AI</li>
+<li>Cómo mantener retrocompatibilidad con fallback</li>
+<li>Cómo refactorizar servicios completos con Gemini CLI</li>
+<li>Configuración de Firebase para apps web</li>
+</ul>
+<h2 is-upgraded>Lo que necesitas</h2>
+<ul>
+<li>App corriendo con features anteriores</li>
+<li>Cuenta de Firebase (gratuita)</li>
+<li>Familiaridad básica con bases de datos NoSQL</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Crear proyecto en Firebase" duration="1">
+        <h2 is-upgraded>Paso 1: Crear proyecto</h2>
+<ol type="1">
+<li>Ve a <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
+<li>Haz clic en <strong>&#34;Crear un proyecto&#34;</strong></li>
+<li>Nombre: <code>kiddie-mart-workshop</code> (o similar)</li>
+<li>Desactiva Google Analytics (no es necesario para el workshop)</li>
+<li>Haz clic en <strong>Crear</strong></li>
+</ol>
+<h2 is-upgraded>Paso 2: Crear app web</h2>
+<ol type="1">
+<li>En el proyecto, haz clic en el ícono <strong>Web</strong> (<code></></code>)</li>
+<li>Nombre de la app: <code>kiddie-mart</code></li>
+<li><strong>No</strong> actives Firebase Hosting por ahora</li>
+<li>Copia la configuración de Firebase que te muestra</li>
+</ol>
+<h2 is-upgraded>Paso 3: Crear base de datos Firestore</h2>
+<ol type="1">
+<li>En el menú lateral, ve a <strong>Firestore Database</strong></li>
+<li>Haz clic en <strong>Crear base de datos</strong></li>
+<li>Selecciona <strong>modo de prueba</strong> (permite lectura/escritura sin autenticación)</li>
+<li>Elige la ubicación más cercana</li>
+</ol>
+<p>Negative : El modo de prueba es solo para el workshop. En producción, siempre configura reglas de seguridad adecuadas en Firestore.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configurar Firebase en el proyecto" duration="1">
+        <p>Pide a Gemini CLI que configure Firebase:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Necesito configurar Firebase en el proyecto. Ya tengo:
+- firebase como dependencia en package.json
+- Un proyecto en Firebase Console con Firestore habilitado
+
+Necesito que:
+1. Crees un archivo src/lib/firebase.ts con la configuración del SDK
+2. Use variables de entorno de .env.local para los valores sensibles:
+   - NEXT_PUBLIC_FIREBASE_API_KEY
+   - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+   - NEXT_PUBLIC_FIREBASE_PROJECT_ID
+   - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+   - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+   - NEXT_PUBLIC_FIREBASE_APP_ID
+3. Exporte la instancia de la app y de Firestore
+4. Maneja el caso donde las variables no están configuradas 
+   (para no romper la app si alguien no tiene Firebase)&#34;
+</code></pre>
+<h2 is-upgraded>Configurar .env.local</h2>
+<p>Agrega tus credenciales de Firebase al archivo <code>.env.local</code>:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Dame el template de variables de entorno que necesito agregar 
+a .env.local para Firebase, con comentarios explicando cada una&#34;
+</code></pre>
+<p>Copia el template y reemplaza con tus valores reales del paso anterior.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Analizar el servicio actual de IndexedDB" duration="1">
+        <p>Antes de crear el servicio de Firestore, entiende el servicio actual:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analiza src/lib/indexedDbService.ts y dame:
+1. Lista de todas las funciones exportadas
+2. Para cada función: parámetros, retorno, y qué hace
+3. Qué colecciones/stores maneja
+4. El esquema de datos (qué campos tiene cada entidad)
+
+Necesito esta información para crear un servicio equivalente en Firestore.&#34;
+</code></pre>
+<h2 is-upgraded>Funciones a migrar</h2>
+<p>Gemini debería identificar funciones como:</p>
+<ul>
+<li><code>openDB()</code> — Inicializar la base de datos</li>
+<li><code>getAllProducts()</code> / <code>addProductDB()</code> / <code>updateProductDB()</code> / <code>deleteProductDB()</code></li>
+<li><code>getAllSalesHistory()</code> / <code>addSaleRecordDB()</code></li>
+<li><code>getAllAccounts()</code> / <code>addAccountDB()</code> / <code>updateAccountDB()</code></li>
+<li><code>bulkAddProductsDB()</code> / <code>bulkAddSalesHistoryDB()</code></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Crear el servicio de Firestore" duration="1">
+        <p>Ahora, pide la implementación:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Crea un nuevo archivo src/lib/firestoreService.ts que replique 
+todas las funciones de indexedDbService.ts pero usando Firebase Firestore.
+
+REQUISITOS:
+1. Misma interfaz (mismos nombres de funciones, mismos parámetros y retornos)
+2. Colecciones en Firestore:
+   - &#39;products&#39; para productos
+   - &#39;salesHistory&#39; para historial de ventas
+   - &#39;accounts&#39; para cuentas de wallet
+3. Los IDs de documentos deben ser los mismos IDs que usan las entidades
+4. Usar los tipos existentes de src/types/kiddieMart.ts
+5. Manejar errores gracefully
+6. Si Firebase no está inicializado, las funciones deben lanzar un error 
+   descriptivo (no fallar silenciosamente)
+
+TAMBIÉN necesito que:
+7. Crees un archivo src/lib/storageService.ts que actúe como &#39;switch&#39;:
+   - Si Firebase está configurado → usa firestoreService
+   - Si Firebase NO está configurado → usa indexedDbService
+   - Exporta las mismas funciones con la misma interfaz
+   - Este será el servicio que importe KiddieMartContext
+
+8. Actualiza src/context/KiddieMartContext.tsx para importar desde 
+   storageService.ts en lugar de indexedDbService.ts directamente&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Revisar la implementación" duration="1">
+        <p>Revisa todos los archivos creados/modificados:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Muéstrame un diagrama de cómo se conectan ahora los servicios:
+1. KiddieMartContext.tsx
+2. storageService.ts (switch)
+3. firestoreService.ts (cloud)
+4. indexedDbService.ts (local)
+5. firebase.ts (config)
+
+¿El fallback funciona correctamente si quito las variables de Firebase?&#34;
+</code></pre>
+<h2 is-upgraded>Diagrama esperado</h2>
+<pre><code>KiddieMartContext.tsx
+        ↓
+  storageService.ts
+      ↙        ↘
+firestoreService  indexedDbService
+      ↓
+  firebase.ts
+      ↓
+  Firebase Cloud
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Probar la integración" duration="1">
+        <h2 is-upgraded>Prueba 1: Con Firebase configurado</h2>
+<ol type="1">
+<li>Asegúrate de que <code>.env.local</code> tiene las credenciales de Firebase</li>
+<li>Reinicia el servidor de desarrollo (<code>make dev</code>)</li>
+<li>Entra como <strong>Admin</strong> y agrega un producto</li>
+<li>Ve a <strong>Firebase Console</strong> → <strong>Firestore</strong> → colección <code>products</code></li>
+<li>Verifica que el producto aparece en Firestore 🎉</li>
+</ol>
+<h2 is-upgraded>Prueba 2: Sin Firebase (fallback)</h2>
+<ol type="1">
+<li>Renombra <code>.env.local</code> a <code>.env.local.bak</code> temporalmente</li>
+<li>Reinicia el servidor</li>
+<li>La app debería funcionar normalmente usando IndexedDB</li>
+<li>Renombra de vuelta <code>.env.local.bak</code> a <code>.env.local</code></li>
+</ol>
+<h2 is-upgraded>Verificar</h2>
+<ul>
+<li>[ ] Productos se guardan en Firestore</li>
+<li>[ ] Ventas se registran en Firestore</li>
+<li>[ ] Cuentas de wallet se guardan en Firestore</li>
+<li>[ ] Sin Firebase, la app usa IndexedDB como antes</li>
+<li>[ ] No hay errores en la consola</li>
+</ul>
+<p>Positive : ¡Si las pruebas pasan, has migrado exitosamente toda la capa de datos a la nube con retrocompatibilidad completa!</p>
+<h2 is-upgraded>¿Problemas?</h2>
+<pre><code language="language-bash" class="language-bash">gemini &#34;La app se conecta a Firestore pero recibe un error de permisos. 
+Las reglas de Firestore están en modo de prueba. ¿Qué puede estar mal?&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Felicitaciones!" duration="0">
+        <p>🎉 <strong>¡Has completado todos los retos del workshop!</strong> 🎉</p>
+<h2 is-upgraded>Lo que aprendiste en este reto</h2>
+<ul>
+<li>Cómo migrar servicios de datos completos con AI</li>
+<li>Cómo implementar el patrón de fallback</li>
+<li>Cómo configurar Firebase Firestore</li>
+<li>Cómo mantener retrocompatibilidad</li>
+</ul>
+<h2 is-upgraded>Lo que construiste</h2>
+<ul>
+<li><code>firebase.ts</code> — Configuración de Firebase</li>
+<li><code>firestoreService.ts</code> — Servicio de datos en la nube</li>
+<li><code>storageService.ts</code> — Switch inteligente entre local y cloud</li>
+<li>Migración completa del <code>KiddieMartContext</code></li>
+</ul>
+<h2 is-upgraded>Resumen del Workshop</h2>
+<p>A lo largo de estos 11 retos aprendiste a:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Habilidad</p>
+</td><td colspan="1" rowspan="1"><p>Retos</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Instalación y configuración</p>
+</td><td colspan="1" rowspan="1"><p>1, 2</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Generación de documentación</p>
+</td><td colspan="1" rowspan="1"><p>3, 4, 5</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Setup de proyecto</p>
+</td><td colspan="1" rowspan="1"><p>5, 6</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Debugging con AI</p>
+</td><td colspan="1" rowspan="1"><p>7, 8</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Implementación de features</p>
+</td><td colspan="1" rowspan="1"><p>9, 10, 11</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Integración de servicios</p>
+</td><td colspan="1" rowspan="1"><p>10, 11</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Recursos adicionales</h2>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs" target="_blank">Documentación de Gemini CLI</a></li>
+<li><a href="https://firebase.google.com/docs/firestore" target="_blank">Firebase Firestore Docs</a></li>
+<li><a href="https://firebase.google.com/docs/genkit" target="_blank">Genkit Documentation</a></li>
+<li><a href="https://nextjs.org/docs" target="_blank">Next.js Documentation</a></li>
+</ul>
+<h2 is-upgraded>¡Gracias por participar! 🙏</h2>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

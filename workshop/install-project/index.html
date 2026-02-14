@@ -1,0 +1,154 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Reto 6: Instalar y Ejecutar el Proyecto</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="install-project"
+                  title="Reto 6: Instalar y Ejecutar el Proyecto"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Introducción" duration="1">
+        <p>Ahora que tienes tu task runner listo, es hora de instalar las dependencias y ejecutar Kiddie Mart. En este reto levantarás la app en modo desarrollo y explorarás sus funcionalidades.</p>
+<h2 is-upgraded>Lo que aprenderás</h2>
+<ul>
+<li>Cómo instalar y ejecutar un proyecto Next.js</li>
+<li>Cómo explorar una app funcionando para entenderla mejor</li>
+<li>Cómo usar Gemini CLI para resolver problemas de instalación</li>
+</ul>
+<h2 is-upgraded>Lo que necesitas</h2>
+<ul>
+<li>Makefile creado (Reto 5)</li>
+<li>Node.js 18+ y npm instalados</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Instalar dependencias" duration="1">
+        <p>Usa el Makefile para instalar:</p>
+<pre><code language="language-bash" class="language-bash">make install
+</code></pre>
+<p>Esto ejecutará <code>npm install</code> e instalará todas las dependencias del proyecto.</p>
+<p>Negative : Si ves errores durante la instalación, es probable que tu versión de Node.js sea incompatible. Verifica con <code>node --version</code> que tienes la versión 18 o superior.</p>
+<h2 is-upgraded>¿Problemas con la instalación?</h2>
+<p>Si la instalación falla, puedes pedir ayuda a Gemini CLI:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;La instalación de npm falló con el siguiente error: [pega el error aquí]. 
+¿Cómo puedo solucionarlo?&#34;
+</code></pre>
+<p>Positive : Gemini CLI es excelente para diagnosticar errores de instalación. Copia y pega el error completo para obtener la mejor respuesta.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Ejecutar en modo desarrollo" duration="1">
+        <p>Inicia el servidor de desarrollo:</p>
+<pre><code language="language-bash" class="language-bash">make dev
+</code></pre>
+<p>O si prefieres el comando directo:</p>
+<pre><code language="language-bash" class="language-bash">npm run dev
+</code></pre>
+<h2 is-upgraded>Resultado esperado</h2>
+<p>Deberías ver algo como:</p>
+<pre><code>▲ Next.js 15.2.3
+- Local:        http://localhost:9002
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 3.2s
+</code></pre>
+<p>Abre tu navegador en <strong>http://localhost:9002</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Explorar la aplicación" duration="1">
+        <p>Con la app corriendo, explora las funcionalidades principales:</p>
+<h2 is-upgraded>Pantalla de Login</h2>
+<p>La primera pantalla muestra dos opciones de rol:</p>
+<ul>
+<li><strong>👨‍💼 Admin</strong> — Acceso al panel de administración</li>
+<li><strong>🧑‍💻 Staff</strong> — Acceso al POS (Point of Sale)</li>
+</ul>
+<h2 is-upgraded>Como Staff (POS)</h2>
+<ol type="1">
+<li>Selecciona el rol <strong>Staff</strong></li>
+<li>Verás el <strong>grid de productos</strong> (aquí podrías notar un bug visual 👀)</li>
+<li>Haz clic en productos para agregar al carrito</li>
+<li>El <strong>carrito</strong> aparece en el lado derecho</li>
+<li>Prueba el proceso de <strong>pago</strong> (efectivo, tarjeta, QR)</li>
+</ol>
+<h2 is-upgraded>Como Admin</h2>
+<ol type="1">
+<li>Vuelve al login y selecciona <strong>Admin</strong></li>
+<li>Explora el <strong>Dashboard</strong> con estadísticas</li>
+<li>Ve a <strong>Productos</strong> para gestionar el inventario</li>
+<li>Revisa el <strong>Historial de Ventas</strong></li>
+<li>Explora la <strong>Gestión de Wallets</strong> para pagos QR</li>
+</ol>
+<p>Positive : ¿Notaste algo raro con el layout de los productos? ¿O con la carga inicial de datos? ¡No te preocupes, son los bugs que resolverás en los próximos retos! 🐛</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verificar el estado de la app" duration="1">
+        <p>Usa Gemini CLI para verificar que la app está funcionando correctamente:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;La app está corriendo en http://localhost:9002. 
+¿Puedes revisar el código y decirme:
+1. ¿Qué roles de usuario existen?
+2. ¿Cuántos productos debería tener por defecto?
+3. ¿Qué métodos de pago están disponibles?
+4. ¿La app soporta modo offline?&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Felicitaciones!" duration="0">
+        <p>🎉 ¡Has completado el Reto 6!</p>
+<h2 is-upgraded>Lo que aprendiste</h2>
+<ul>
+<li>Cómo instalar y ejecutar un proyecto Next.js</li>
+<li>Las funcionalidades principales de Kiddie Mart</li>
+<li>Cómo usar Gemini CLI para resolver problemas de instalación</li>
+</ul>
+<h2 is-upgraded>Lo que observaste</h2>
+<ul>
+<li>La app tiene algunos <strong>bugs visuales</strong> que resolverás en los retos 7 y 8</li>
+</ul>
+<h2 is-upgraded>Siguiente paso</h2>
+<p>Continúa con el <strong>Reto 7: Resolver Bug en Load State</strong> — ¡es hora de usar Gemini CLI para debugging!</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

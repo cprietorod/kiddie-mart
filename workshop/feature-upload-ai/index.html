@@ -1,0 +1,234 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Reto 10: Nueva Feature — Upload de Productos con AI</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="feature-upload-ai"
+                  title="Reto 10: Nueva Feature — Upload de Productos con AI"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Introducción" duration="1">
+        <p>¡Este es el reto más innovador del workshop! Vas a crear un sistema donde el administrador puede <strong>subir una foto de un producto</strong> y la AI de Google (Gemini Vision) detecta automáticamente el nombre, categoría y precio sugerido.</p>
+<h2 is-upgraded>Lo que construirás</h2>
+<ul>
+<li>Botón <strong>&#34;Upload con AI&#34;</strong> en el panel de administración de productos</li>
+<li>Modal para <strong>subir imagen o tomar foto con la cámara</strong></li>
+<li>Llamada a <strong>Gemini Vision</strong> para analizar la imagen</li>
+<li><strong>Pre-llenado automático</strong> del formulario de nuevo producto</li>
+<li>Flujo completo: foto → AI → formulario → guardar</li>
+</ul>
+<h2 is-upgraded>Lo que aprenderás</h2>
+<ul>
+<li>Cómo integrar AI Vision en una app Next.js</li>
+<li>Cómo usar Genkit para llamar a modelos de AI</li>
+<li>Cómo manejar upload de imágenes en el browser</li>
+<li>Prompting para vision/multimodal AI</li>
+</ul>
+<h2 is-upgraded>Lo que necesitas</h2>
+<ul>
+<li>App corriendo sin bugs</li>
+<li>API Key de Google AI (Gemini API)</li>
+<li>Conocimiento básico de APIs REST</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Entender la infraestructura AI existente" duration="1">
+        <p>El proyecto ya tiene Genkit configurado. Usa Gemini CLI para entender qué hay:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analiza la infraestructura de AI del proyecto:
+1. Revisa src/ai/ - ¿qué archivos hay y qué hacen?
+2. Revisa package.json - ¿qué paquetes de AI están instalados?
+3. ¿Hay alguna API route o server action para AI?
+4. ¿Cómo se configura Genkit en el proyecto?
+
+Dame un resumen de lo que ya existe y qué necesitaríamos agregar 
+para analizar imágenes con Gemini Vision.&#34;
+</code></pre>
+<h2 is-upgraded>Lo que descubrirás</h2>
+<ul>
+<li>El proyecto usa <code>genkit</code> y <code>@genkit-ai/googleai</code></li>
+<li>Hay configuración base en <code>src/ai/</code></li>
+<li>Se necesita configurar la API Key de Google AI</li>
+<li>Genkit maneja las llamadas al modelo de Gemini</li>
+</ul>
+<p>Positive : Genkit simplifica enormemente las llamadas a modelos de AI. En lugar de manejar HTTP requests manualmente, defines &#34;flows&#34; y el framework se encarga del resto.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configurar la API Key" duration="1">
+        <p>Para que Gemini Vision funcione, necesitas una API Key:</p>
+<ol type="1">
+<li>Ve a <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></li>
+<li>Copia tu API Key</li>
+<li>Crea o edita el archivo <code>.env.local</code> en la raíz del proyecto:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash">echo &#34;GOOGLE_GENAI_API_KEY=tu-api-key-aqui&#34; &gt;&gt; .env.local
+</code></pre>
+<p>Negative : Nunca commits tu API Key al repositorio. El archivo <code>.env.local</code> ya está en <code>.gitignore</code>.</p>
+<h2 is-upgraded>Verificar con Gemini CLI</h2>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Revisa el archivo .env.local y verifica que la variable 
+GOOGLE_GENAI_API_KEY está configurada. No me muestres el valor, 
+solo confirma que existe.&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implementar el flow de AI Vision" duration="1">
+        <p>Ahora, pide a Gemini CLI que implemente el flow completo:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Quiero implementar una feature que permita subir una foto 
+de un producto y usar Gemini Vision para detectar metadata.
+
+PASO 1 - Backend (AI Flow):
+Crea un Genkit flow en src/ai/ que:
+- Reciba una imagen en base64
+- Llame a Gemini Vision (gemini-2.0-flash o similar con vision)
+- Pida al modelo que detecte:
+  * Nombre del producto (en español)
+  * Categoría (una de: Fruit, Snack, Drink, Candy, Toy, Other)
+  * Precio sugerido en USD (basado en lo que parece ser el producto)
+  * Un emoji representativo
+- Retorne un JSON con estos campos
+
+PASO 2 - API Route:
+Crea un API route en Next.js (src/app/api/analyze-product/route.ts) que:
+- Reciba la imagen como base64 en el body
+- Llame al flow de Genkit
+- Retorne el JSON con la metadata detectada
+
+PASO 3 - Frontend:
+En el panel de admin (ProductManagement.tsx):
+- Agrega un botón &#39;📸 Upload con AI&#39; junto al botón de agregar producto
+- Crea un modal que permita:
+  a) Seleccionar una imagen del dispositivo (input file)
+  b) Tomar foto con la cámara (navigator.mediaDevices)
+- Una vez que tenga la imagen:
+  a) Muestra un preview de la imagen
+  b) Llama al API route con la imagen en base64
+  c) Muestra un loading indicator mientras procesa
+  d) Pre-llena el formulario de nuevo producto con los datos detectados
+  e) El admin puede editar antes de guardar
+
+Usa los componentes UI existentes (Dialog, Button, etc.) de src/components/ui/.
+El proyecto ya tiene @genkit-ai/googleai y genkit instalados.&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Revisar la implementación" duration="1">
+        <p>Gemini habrá creado/modificado varios archivos. Revísalos:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Dame un resumen de todos los archivos que creaste o modificaste 
+para la feature de upload con AI. Para cada uno, explícame:
+1. Qué hace
+2. Cómo se conecta con los demás
+3. Si hay algo que deba revisar manualmente&#34;
+</code></pre>
+<h2 is-upgraded>Archivos esperados</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Archivo</p>
+</td><td colspan="1" rowspan="1"><p>Propósito</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/ai/analyze-product.ts</code></p>
+</td><td colspan="1" rowspan="1"><p>Flow de Genkit para analizar imagen</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/app/api/analyze-product/route.ts</code></p>
+</td><td colspan="1" rowspan="1"><p>API route para el frontend</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/components/kiddie-mart/admin/UploadProductModal.tsx</code></p>
+</td><td colspan="1" rowspan="1"><p>Modal de upload</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/components/kiddie-mart/admin/ProductManagement.tsx</code></p>
+</td><td colspan="1" rowspan="1"><p>Botón de upload agregado</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Probar la feature" duration="1">
+        <h2 is-upgraded>Prueba con una imagen de producto</h2>
+<ol type="1">
+<li>Entra como <strong>Admin</strong> en la app</li>
+<li>Ve a la sección de <strong>Productos</strong></li>
+<li>Haz clic en <strong>&#34;📸 Upload con AI&#34;</strong></li>
+<li>Sube una imagen de un producto (fruta, snack, juguete, etc.)</li>
+<li>Espera a que la AI analice la imagen</li>
+<li>Verifica que el formulario se pre-llena con datos razonables</li>
+<li>Ajusta el nombre/precio si es necesario</li>
+<li>Guarda el producto</li>
+</ol>
+<h2 is-upgraded>Verificar resultados</h2>
+<ul>
+<li>[ ] El modal de upload aparece correctamente</li>
+<li>[ ] Se puede seleccionar una imagen del dispositivo</li>
+<li>[ ] Se muestra un preview de la imagen</li>
+<li>[ ] La AI retorna nombre, categoría, precio y emoji</li>
+<li>[ ] El formulario se pre-llena con los datos de la AI</li>
+<li>[ ] Se puede editar antes de guardar</li>
+<li>[ ] El producto se guarda exitosamente</li>
+</ul>
+<p>Positive : Si la detección no es perfecta, no te preocupes. Los modelos de Vision son buenos pero no perfectos, por eso el flujo permite editar antes de guardar.</p>
+<h2 is-upgraded>¿Errores?</h2>
+<p>Si la API falla:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;La llamada al API de analyze-product falla con error 401. 
+¿Cómo puedo verificar que la API Key de Google AI está siendo 
+leída correctamente en el server-side?&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Felicitaciones!" duration="0">
+        <p>🎉 ¡Has completado el Reto 10!</p>
+<h2 is-upgraded>Lo que aprendiste</h2>
+<ul>
+<li>Cómo integrar Gemini Vision en una app Next.js</li>
+<li>Cómo crear flows con Genkit</li>
+<li>Cómo manejar upload de imágenes y llamadas a AI desde el frontend</li>
+</ul>
+<h2 is-upgraded>Lo que construiste</h2>
+<ul>
+<li>Flow de AI Vision para análisis de productos</li>
+<li>API route para conectar frontend y backend</li>
+<li>Modal de upload con preview y pre-llenado de formulario</li>
+</ul>
+<h2 is-upgraded>Siguiente paso</h2>
+<p>¡Último reto! Continúa con el <strong>Reto 11: Guardar Datos en Firebase</strong> para migrar a la nube.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

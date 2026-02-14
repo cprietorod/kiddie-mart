@@ -1,0 +1,215 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Reto 8: Resolver Problema de Margin/Layout</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="fix-margin-issue"
+                  title="Reto 8: Resolver Problema de Margin/Layout"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Introducción" duration="1">
+        <p>En este reto hay un bug visual: el grid de productos se ve desplazado y con espaciado incorrecto. Usarás Gemini CLI para diagnosticar un problema de CSS/Tailwind y corregirlo.</p>
+<h2 is-upgraded>El problema</h2>
+<p>El grid de productos tiene:</p>
+<ul>
+<li>Un <strong>margen izquierdo negativo</strong> que lo desplaza fuera de su contenedor</li>
+<li>Un <strong>espacio excesivo arriba</strong> que separa demasiado el grid del filtro</li>
+</ul>
+<h2 is-upgraded>Lo que aprenderás</h2>
+<ul>
+<li>Cómo diagnosticar problemas de CSS/layout con AI</li>
+<li>Cómo interpretar clases de Tailwind CSS</li>
+<li>Debugging visual: screenshot → descripción → fix</li>
+</ul>
+<h2 is-upgraded>Lo que necesitas</h2>
+<ul>
+<li>La app corriendo con el bug anterior corregido (Reto 7)</li>
+<li>Gemini CLI configurado</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Observar el bug" duration="1">
+        <ol type="1">
+<li>Abre la app en <strong>http://localhost:9002</strong></li>
+<li>Entra como <strong>Staff</strong></li>
+<li>Observa el grid de productos</li>
+</ol>
+<h2 is-upgraded>Lo que deberías ver (el bug)</h2>
+<ul>
+<li>Los productos están <strong>desplazados hacia la izquierda</strong></li>
+<li>Parte del contenido se sale del área visible</li>
+<li>Hay un <strong>espacio grande</strong> entre el buscador/filtro y los productos</li>
+<li>El layout general se ve roto</li>
+</ul>
+<h2 is-upgraded>Lo que debería verse (correcto)</h2>
+<ul>
+<li>Los productos alineados dentro de su contenedor</li>
+<li>Sin espacios excesivos</li>
+<li>Grid responsivo y simétrico</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Diagnosticar con Gemini CLI" duration="1">
+        <p>Describe el problema visual a Gemini CLI:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Hay un problema visual en la app: el grid de productos 
+(la lista principal donde se muestran los productos a la venta) 
+aparece desplazado hacia la izquierda, como si se saliera 
+de su contenedor, y también tiene un espacio excesivo arriba 
+entre el buscador y el grid.
+
+El problema parece ser de CSS/Tailwind. Revisa los componentes 
+que renderizan la lista de productos:
+- src/components/kiddie-mart/ProductList.tsx
+- Busca clases de Tailwind que puedan causar márgenes negativos o 
+  márgenes superiores excesivos&#34;
+</code></pre>
+<h2 is-upgraded>Lo que Gemini debería encontrar</h2>
+<p>Gemini identificará clases de Tailwind sospechosas en el grid de productos. Específicamente, buscará:</p>
+<ul>
+<li>Clases con <strong>márgenes negativos</strong> como <code>-ml-*</code>, <code>-mr-*</code>, <code>-mt-*</code></li>
+<li>Clases con <strong>márgenes grandes</strong> como <code>mt-24</code>, <code>mt-20</code></li>
+<li>Clases que no pertenecen al diseño original</li>
+</ul>
+<p>Positive : Los problemas de CSS son ideales para diagnosticar con AI porque las clases de Tailwind son descriptivas y fáciles de razonar sobre ellas.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Entender las clases de Tailwind" duration="1">
+        <p>Si no estás familiarizado con las clases de Tailwind que causan el problema, pregúntale a Gemini:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Explícame qué hacen estas clases de Tailwind CSS:
+- -ml-8
+- mt-24
+- gap-4
+- p-4
+- grid-cols-2
+
+¿Cuáles de estas podrían causar un layout roto?&#34;
+</code></pre>
+<h2 is-upgraded>Referencia rápida</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Clase</p>
+</td><td colspan="1" rowspan="1"><p>Efecto</p>
+</td><td colspan="1" rowspan="1"><p>¿Problema?</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>-ml-8</code></p>
+</td><td colspan="1" rowspan="1"><p>Margen izquierdo -2rem (32px hacia la izquierda)</p>
+</td><td colspan="1" rowspan="1"><p>✅ ¡Sí!</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>mt-24</code></p>
+</td><td colspan="1" rowspan="1"><p>Margen superior 6rem (96px arriba)</p>
+</td><td colspan="1" rowspan="1"><p>✅ ¡Sí!</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>gap-4</code></p>
+</td><td colspan="1" rowspan="1"><p>Espacio de 1rem entre items del grid</p>
+</td><td colspan="1" rowspan="1"><p>❌ Normal</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>p-4</code></p>
+</td><td colspan="1" rowspan="1"><p>Padding de 1rem en todos los lados</p>
+</td><td colspan="1" rowspan="1"><p>❌ Normal</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>grid-cols-2</code></p>
+</td><td colspan="1" rowspan="1"><p>Grid de 2 columnas</p>
+</td><td colspan="1" rowspan="1"><p>❌ Normal</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Aplicar el fix" duration="1">
+        <p>Pide a Gemini que corrija el problema:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Corrige el problema de layout en ProductList.tsx. 
+Elimina las clases de Tailwind que causan el margen negativo 
+y el espacio excesivo arriba. El grid de productos debe:
+- Estar alineado dentro de su contenedor
+- Tener un padding de p-4 normal
+- Usar grid responsivo (2 cols → 5 cols según el breakpoint)
+- No tener márgenes negativos&#34;
+</code></pre>
+<h2 is-upgraded>Verificar el fix</h2>
+<ol type="1">
+<li>Guarda los cambios</li>
+<li>Mira la app en el navegador (hot reload debería aplicar los cambios)</li>
+<li>Verifica que: <ul>
+<li>[ ] Los productos están alineados correctamente</li>
+<li>[ ] No hay desplazamiento horizontal</li>
+<li>[ ] El espacio entre el filtro y los productos es razonable</li>
+<li>[ ] El grid es responsivo (cambia columnas al redimensionar)</li>
+</ul>
+</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Explorar con DevTools" duration="1">
+        <p>Como paso extra, usa DevTools para verificar:</p>
+<ol type="1">
+<li>Abre DevTools (<code>Cmd+Opt+I</code>)</li>
+<li>Usa el selector de elementos (icono de cursor) para inspeccionar el grid</li>
+<li>Verifica que el <code>div</code> del grid tiene las clases correctas</li>
+<li>En la pestaña <strong>Computed</strong>, verifica que no hay márgenes negativos</li>
+</ol>
+<pre><code language="language-bash" class="language-bash">gemini &#34;¿Cómo puedo usar Chrome DevTools para inspeccionar las clases de 
+Tailwind CSS que se aplican a un elemento específico? 
+Dame un paso a paso rápido.&#34;
+</code></pre>
+<p>Positive : Combinar Gemini CLI con DevTools del navegador es un flujo de debugging visual muy poderoso.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Felicitaciones!" duration="0">
+        <p>🎉 ¡Has completado el Reto 8!</p>
+<h2 is-upgraded>Lo que aprendiste</h2>
+<ul>
+<li>Cómo diagnosticar problemas de CSS/layout con AI</li>
+<li>Cómo interpretar y depurar clases de Tailwind CSS</li>
+<li>Cómo usar DevTools como complemento a Gemini CLI</li>
+</ul>
+<h2 is-upgraded>Lo que corregiste</h2>
+<ul>
+<li>Layout roto del grid de productos causado por márgenes incorrectos</li>
+</ul>
+<h2 is-upgraded>Siguiente paso</h2>
+<p>¡Pasamos a lo más emocionante! Continúa con el <strong>Reto 9: Soporte de Temas</strong> — tu primera feature nueva con Gemini CLI.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

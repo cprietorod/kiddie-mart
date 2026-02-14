@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:40:49-05:00",
+  "id": "setup-gemini-md",
+  "duration": 6,
+  "title": "Reto 2: Setup GEMINI.md",
+  "authors": "Carlos Prieto",
+  "summary": "Crear el archivo GEMINI.md para dar contexto del proyecto a Gemini CLI",
+  "source": "02-setup-gemini-md.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "setup-gemini-md"
+}

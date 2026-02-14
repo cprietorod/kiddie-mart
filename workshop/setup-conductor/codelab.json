@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:42:22-05:00",
+  "id": "setup-conductor",
+  "duration": 5,
+  "title": "Reto 5: Setup Conductor (Task Runner)",
+  "authors": "Carlos Prieto",
+  "summary": "Crear un Makefile como task runner para simplificar comandos del proyecto",
+  "source": "05-setup-conductor.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "setup-conductor"
+}

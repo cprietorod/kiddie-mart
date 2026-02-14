@@ -1,0 +1,167 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Reto 1: Instalar Gemini CLI</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="install-gemini-cli"
+                  title="Reto 1: Instalar Gemini CLI"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Introducción" duration="1">
+        <p>En este primer reto vas a instalar <strong>Gemini CLI</strong> en tu máquina y verificar que funciona correctamente. Gemini CLI es tu puerta de entrada a la programación asistida por AI desde la terminal.</p>
+<h2 is-upgraded>Lo que aprenderás</h2>
+<ul>
+<li>Instalar Gemini CLI globalmente con npm</li>
+<li>Autenticarte con tu cuenta de Google o API Key</li>
+<li>Verificar que la conexión con el modelo AI funciona</li>
+<li>Hacer tu primera interacción con Gemini desde la terminal</li>
+</ul>
+<h2 is-upgraded>Lo que necesitas</h2>
+<ul>
+<li>Node.js 18+ instalado</li>
+<li>npm 9+ instalado</li>
+<li>Cuenta de Google o API Key de Gemini</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Instalar Gemini CLI" duration="1">
+        <h2 is-upgraded>Paso 1: Instala el paquete globalmente</h2>
+<p>Abre tu terminal y ejecuta:</p>
+<pre><code language="language-bash" class="language-bash">npm install -g @anthropic-ai/gemini-cli
+</code></pre>
+<p>Positive : Si tienes problemas de permisos en macOS/Linux, puedes usar <code>sudo npm install -g @anthropic-ai/gemini-cli</code> o configurar npm para instalar paquetes globales sin sudo.</p>
+<h2 is-upgraded>Paso 2: Verifica la instalación</h2>
+<pre><code language="language-bash" class="language-bash">gemini --version
+</code></pre>
+<p>Deberías ver un número de versión como <code>1.x.x</code>. Si ves un error de &#34;command not found&#34;, verifica que el directorio global de npm esté en tu PATH.</p>
+<p>Negative : Si <code>gemini --version</code> no funciona, prueba cerrar y abrir la terminal, o ejecuta <code>npx @anthropic-ai/gemini-cli --version</code> como alternativa.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Autenticación" duration="1">
+        <p>Hay dos formas de autenticarte con Gemini CLI:</p>
+<h2 is-upgraded>Opción A: Login con cuenta de Google (recomendado)</h2>
+<pre><code language="language-bash" class="language-bash">gemini auth login
+</code></pre>
+<p>Esto abrirá tu navegador para autenticarte con tu cuenta de Google. Sigue las instrucciones en pantalla.</p>
+<h2 is-upgraded>Opción B: API Key</h2>
+<p>Si tienes una API Key de Gemini, puedes configurarla como variable de entorno:</p>
+<pre><code language="language-bash" class="language-bash">export GEMINI_API_KEY=&#34;tu-api-key-aqui&#34;
+</code></pre>
+<p>Para obtener una API Key:</p>
+<ol type="1">
+<li>Ve a <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></li>
+<li>Haz clic en &#34;Create API Key&#34;</li>
+<li>Copia la clave generada</li>
+</ol>
+<p>Positive : Para el workshop, el instructor proporcionará API Keys de respaldo si tienes problemas con la autenticación.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Tu primera interacción" duration="1">
+        <p>¡Es hora de probar que todo funciona! Ejecuta:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Hola! Dime en una línea qué eres y qué puedes hacer&#34;
+</code></pre>
+<h2 is-upgraded>Resultado esperado</h2>
+<p>Deberías ver una respuesta del modelo AI en tu terminal, algo como:</p>
+<pre><code>Soy Gemini, un modelo de lenguaje de Google que puede ayudarte a escribir, 
+analizar y depurar código, generar documentación y responder preguntas técnicas.
+</code></pre>
+<h2 is-upgraded>Prueba con una pregunta técnica</h2>
+<pre><code language="language-bash" class="language-bash">gemini &#34;¿Qué es Next.js y para qué se usa? Responde en 2 líneas&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modo interactivo" duration="1">
+        <p>Gemini CLI también tiene un modo interactivo donde puedes tener una conversación continua:</p>
+<pre><code language="language-bash" class="language-bash">gemini
+</code></pre>
+<p>Esto abrirá una sesión interactiva. Prueba escribir:</p>
+<pre><code>&gt; Explícame qué es un archivo package.json en 3 bullet points
+</code></pre>
+<p>Para salir del modo interactivo, escribe <code>/exit</code> o presiona <code>Ctrl+C</code>.</p>
+<p>Positive : El modo interactivo es muy útil cuando estás trabajando en un proyecto y quieres hacer varias preguntas seguidas sin perder el contexto.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verificación final" duration="1">
+        <p>Antes de continuar, asegúrate de que puedes responder <strong>sí</strong> a todas estas preguntas:</p>
+<ul>
+<li>[ ] ¿<code>gemini --version</code> muestra un número de versión?</li>
+<li>[ ] ¿Puedes ejecutar <code>gemini "hola"</code> y recibir una respuesta?</li>
+<li>[ ] ¿Puedes entrar al modo interactivo con <code>gemini</code>?</li>
+</ul>
+<h2 is-upgraded>¿Problemas comunes?</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Problema</p>
+</td><td colspan="1" rowspan="1"><p>Solución</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>command not found</code></p>
+</td><td colspan="1" rowspan="1"><p>Verifica que npm global está en tu PATH</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Error de autenticación</p>
+</td><td colspan="1" rowspan="1"><p>Prueba con API Key en lugar de login</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Timeout</p>
+</td><td colspan="1" rowspan="1"><p>Verifica tu conexión a internet</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Rate limit</p>
+</td><td colspan="1" rowspan="1"><p>Espera unos segundos e intenta de nuevo</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Felicitaciones!" duration="0">
+        <p>🎉 ¡Has completado el Reto 1!</p>
+<h2 is-upgraded>Lo que aprendiste</h2>
+<ul>
+<li>Cómo instalar Gemini CLI</li>
+<li>Cómo autenticarte</li>
+<li>Cómo hacer consultas simples y usar el modo interactivo</li>
+</ul>
+<h2 is-upgraded>Siguiente paso</h2>
+<p>Continúa con el <strong>Reto 2: Setup GEMINI.md</strong> para configurar el contexto de tu proyecto.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

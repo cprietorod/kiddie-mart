@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:43:41-05:00",
+  "id": "fix-load-state-bug",
+  "duration": 6,
+  "title": "Reto 7: Resolver Bug en Load State",
+  "authors": "Carlos Prieto",
+  "summary": "Diagnosticar y corregir un bug en la carga de estado desde IndexedDB",
+  "source": "07-fix-load-state-bug.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools",
+    "debugging"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "fix-load-state-bug"
+}

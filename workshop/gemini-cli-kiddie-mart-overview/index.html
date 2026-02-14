@@ -1,0 +1,151 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Gemini CLI Workshop: Aprende a Programar con AI usando Kiddie Mart</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="gemini-cli-kiddie-mart-overview"
+                  title="Gemini CLI Workshop: Aprende a Programar con AI usando Kiddie Mart"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Bienvenida" duration="1">
+        <p>¡Bienvenido al <strong>Workshop de Gemini CLI</strong>! 🎉</p>
+<p>En este workshop aprenderás a usar <strong>Gemini CLI</strong> como tu asistente de desarrollo AI mientras trabajas en un proyecto real: <strong>Kiddie Mart</strong>, una aplicación POS (Point of Sale) educativa para niños.</p>
+<h2 is-upgraded>¿Qué es Gemini CLI?</h2>
+<p>Gemini CLI es una herramienta de línea de comandos que te permite interactuar con los modelos de AI de Google directamente desde tu terminal. Es como tener un programador senior sentado a tu lado, ayudándote con:</p>
+<ul>
+<li>🔍 Analizar y entender código existente</li>
+<li>📝 Generar documentación profesional</li>
+<li>🐛 Encontrar y corregir bugs</li>
+<li>✨ Implementar nuevas features</li>
+<li>🏗️ Refactorizar código</li>
+</ul>
+<h2 is-upgraded>¿Qué es Kiddie Mart?</h2>
+<p>Kiddie Mart es una app POS educativa diseñada para que los niños aprendan sobre compras y ventas. Está construida con:</p>
+<ul>
+<li><strong>Next.js</strong> + <strong>React</strong> + <strong>TypeScript</strong></li>
+<li><strong>Tailwind CSS</strong> con un tema pastel infantil</li>
+<li><strong>IndexedDB</strong> para persistencia local</li>
+<li><strong>Internacionalización</strong> (Español/Inglés) con <code>next-intl</code></li>
+<li><strong>PWA</strong> para uso offline</li>
+<li><strong>Genkit</strong> para funciones de AI</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Lo que aprenderás" duration="1">
+        <ul>
+<li>✅ Instalar y configurar Gemini CLI</li>
+<li>✅ Crear archivos de contexto (<code>GEMINI.md</code>) para mejorar las respuestas de AI</li>
+<li>✅ Generar documentación profesional de forma asistida</li>
+<li>✅ Diagnosticar y corregir bugs con ayuda de AI</li>
+<li>✅ Implementar nuevas features guiado por Gemini CLI</li>
+<li>✅ Integrar servicios como Firebase y AI Vision</li>
+<li>✅ Escribir prompts efectivos para desarrollo</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Requisitos previos" duration="1">
+        <h2 is-upgraded>Conocimientos necesarios</h2>
+<ul>
+<li>Fundamentos de <strong>JavaScript/TypeScript</strong></li>
+<li>Conceptos básicos de <strong>React</strong> (componentes, estado, props)</li>
+<li>Uso básico de la <strong>terminal/línea de comandos</strong></li>
+<li>Familiaridad con <strong>Git</strong></li>
+</ul>
+<h2 is-upgraded>Software necesario</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Herramienta</p>
+</td><td colspan="1" rowspan="1"><p>Versión mínima</p>
+</td><td colspan="1" rowspan="1"><p>Verificar con</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Node.js</p>
+</td><td colspan="1" rowspan="1"><p>18+</p>
+</td><td colspan="1" rowspan="1"><p><code>node --version</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>npm</p>
+</td><td colspan="1" rowspan="1"><p>9+</p>
+</td><td colspan="1" rowspan="1"><p><code>npm --version</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Git</p>
+</td><td colspan="1" rowspan="1"><p>2.x</p>
+</td><td colspan="1" rowspan="1"><p><code>git --version</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Editor de código</p>
+</td><td colspan="1" rowspan="1"><p>VS Code recomendado</p>
+</td><td colspan="1" rowspan="1"><p>—</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Navegador moderno</p>
+</td><td colspan="1" rowspan="1"><p>Chrome/Edge/Firefox</p>
+</td><td colspan="1" rowspan="1"><p>—</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Credenciales necesarias</h2>
+<ul>
+<li>Cuenta de Google (para Gemini API Key)</li>
+<li>(Opcional) Cuenta de Firebase para el último reto</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Estructura del workshop" duration="1">
+        <p>El workshop está dividido en <strong>4 módulos</strong> con <strong>11 retos</strong> progresivos:</p>
+<h2 is-upgraded>Módulo 1: Setup (Retos 1-2)</h2>
+<p>Instalar Gemini CLI y configurar el contexto del proyecto.</p>
+<h2 is-upgraded>Módulo 2: Documentación (Retos 3-6)</h2>
+<p>Generar documentación, crear un task runner, e instalar el proyecto.</p>
+<h2 is-upgraded>Módulo 3: Bug Fixing (Retos 7-8)</h2>
+<p>Usar Gemini CLI para diagnosticar y corregir bugs reales.</p>
+<h2 is-upgraded>Módulo 4: Nuevas Features (Retos 9-11)</h2>
+<p>Implementar features completas con ayuda de AI: temas, upload con AI, y Firebase.</p>
+<p>Positive : Cada reto es independiente pero se recomienda seguir el orden. Los retos del Módulo 4 son los más avanzados.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Comencemos!" duration="1">
+        <p>El código del proyecto está en el repositorio <strong>kiddie-mart</strong>. Si aún no lo has clonado:</p>
+<pre><code language="language-bash" class="language-bash">git clone &lt;URL_DEL_REPOSITORIO&gt;
+cd kiddie-mart
+git checkout workshop-start
+</code></pre>
+<p>Positive : Asegúrate de estar en la rama <code>workshop-start</code>. Esta rama tiene todo configurado para el workshop, incluyendo algunos bugs que resolverás más adelante 😉</p>
+<p>¡Dirígete al <strong>Reto 1: Instalar Gemini CLI</strong> para comenzar!</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

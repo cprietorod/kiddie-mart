@@ -1,0 +1,196 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Reto 7: Resolver Bug en Load State</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="fix-load-state-bug"
+                  title="Reto 7: Resolver Bug en Load State"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Introducción" duration="1">
+        <p>¡Es hora de hacer debugging con AI! En este reto, usarás Gemini CLI para encontrar y corregir un bug real en la carga del estado de la aplicación.</p>
+<h2 is-upgraded>El problema</h2>
+<p>Al abrir la app por primera vez, <strong>los productos no se cargan correctamente</strong>. A veces la lista aparece vacía y los productos predeterminados no se muestran.</p>
+<h2 is-upgraded>Lo que aprenderás</h2>
+<ul>
+<li>Cómo describir bugs de forma precisa a Gemini CLI</li>
+<li>Cómo usar AI para analizar lógica de estado y encontrar errores</li>
+<li>Flujo de debugging: describir síntoma → localizar archivo → encontrar causa → aplicar fix → verificar</li>
+</ul>
+<h2 is-upgraded>Lo que necesitas</h2>
+<ul>
+<li>La app corriendo en modo desarrollo</li>
+<li>Gemini CLI configurado con <code>GEMINI.md</code></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Reproducir el bug" duration="1">
+        <p>Primero, vamos a confirmar el bug:</p>
+<ol type="1">
+<li>Abre la app en <strong>http://localhost:9002</strong></li>
+<li>Entra como <strong>Staff</strong></li>
+<li>Observa la lista de productos</li>
+</ol>
+<p>El comportamiento esperado es ver una lista de productos con iconos, nombres y precios. Pero podrías ver:</p>
+<ul>
+<li>Una lista vacía</li>
+<li>Un mensaje de &#34;no hay productos&#34;</li>
+</ul>
+<h2 is-upgraded>Limpiar IndexedDB para reproducir</h2>
+<p>Si la app ya tiene datos en caché, limpia IndexedDB para reproducir el bug de primera carga:</p>
+<ol type="1">
+<li>Abre DevTools (<code>F12</code> o <code>Cmd+Opt+I</code>)</li>
+<li>Ve a <strong>Application</strong> → <strong>IndexedDB</strong></li>
+<li>Borra la base de datos <code>KiddieMartDB</code></li>
+<li>Recarga la página</li>
+</ol>
+<p>Negative : El bug está relacionado con la carga inicial de datos. Si los datos ya están en IndexedDB de una sesión anterior, el bug podría no ser visible inmediatamente.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Pedir ayuda a Gemini CLI" duration="1">
+        <p>Ahora, pídele a Gemini CLI que analice el problema:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Hay un bug en la aplicación: cuando se abre por primera vez 
+(sin datos en IndexedDB), los productos no se cargan y la lista 
+aparece vacía. 
+
+El problema está en la carga del estado inicial. Revisa:
+1. src/context/KiddieMartContext.tsx - la función loadData
+2. src/lib/indexedDbService.ts - la función getAllProducts
+
+Busca problemas en cómo se manejan los valores de retorno de 
+las funciones de IndexedDB, especialmente cuando la DB está vacía.&#34;
+</code></pre>
+<h2 is-upgraded>Lo que Gemini debería encontrar</h2>
+<p>Gemini CLI analizará el código y debería identificar que hay un problema con cómo se maneja el valor de retorno de <code>getAllProducts()</code>. Específicamente:</p>
+<ul>
+<li><code>getAllProducts()</code> retorna un array vacío <code>[]</code> cuando no hay productos</li>
+<li>Pero en <code>loadData</code>, el resultado se transforma de una manera que impide que el seeding (carga de datos iniciales) funcione correctamente</li>
+</ul>
+<p>Positive : Observa cómo un prompt con contexto específico (nombre de archivo, nombre de función, síntoma) produce un diagnóstico mucho más preciso que simplemente decir &#34;la app no funciona&#34;.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Entender la causa raíz" duration="1">
+        <p>Pide a Gemini que te explique la causa raíz en detalle:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Explícame en detalle la causa raíz del bug en loadData. 
+¿Qué línea exacta causa el problema y por qué? 
+Muéstrame el flujo de datos paso a paso.&#34;
+</code></pre>
+<h2 is-upgraded>La causa raíz</h2>
+<p>El bug es sutil. En la función <code>loadData()</code>:</p>
+<ol type="1">
+<li><code>getAllProducts()</code> retorna <code>[]</code> (array vacío) cuando la DB está vacía</li>
+<li>Pero el código usa <code>|| undefined</code> que convierte <code>[]</code> a <code>undefined</code> (porque <code>[]</code> es truthy, esto en realidad no cambia <code>[]</code>... ¿o sí?)</li>
+<li>El array vacío <code>[]</code> es <strong>truthy</strong> en JavaScript, así que <code>[] || undefined</code> sigue siendo <code>[]</code></li>
+<li><strong>Pero espera</strong> — el problema real es que <code>?.length</code> con optional chaining cambia la lógica de seeding</li>
+</ol>
+<p>El código debería verificar <code>dbProducts.length === 0</code> directamente, no usar optional chaining que permite que <code>undefined</code> pase silenciosamente.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Aplicar el fix" duration="1">
+        <p>Pide a Gemini que aplique la corrección:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Corrige el bug en la función loadData de 
+src/context/KiddieMartContext.tsx. 
+El fix debe:
+1. Manejar correctamente el caso cuando getAllProducts retorna un array vacío
+2. Asegurar que el seeding de productos iniciales funcione
+3. No cambiar el comportamiento cuando ya hay productos en la DB&#34;
+</code></pre>
+<h2 is-upgraded>Verificar el fix</h2>
+<p>Después de que Gemini aplique el cambio:</p>
+<ol type="1">
+<li>Abre DevTools → <strong>Application</strong> → <strong>IndexedDB</strong></li>
+<li>Borra <code>KiddieMartDB</code></li>
+<li>Recarga la página</li>
+<li>Los productos deberían aparecer correctamente 🎉</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Reflexión" duration="1">
+        <h2 is-upgraded>¿Qué aprendimos sobre debugging con AI?</h2>
+<ol type="1">
+<li><strong>Describir el síntoma claramente</strong> — &#34;productos no cargan&#34; es mejor que &#34;no funciona&#34;</li>
+<li><strong>Dar pistas sobre dónde buscar</strong> — indicar archivos y funciones específicas</li>
+<li><strong>Pedir explicación de la causa raíz</strong> — no solo el fix, sino el &#34;por qué&#34;</li>
+<li><strong>Verificar siempre</strong> — aplicar el fix y probar que resuelve el problema</li>
+</ol>
+<h2 is-upgraded>Técnicas de prompting para debugging</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Técnica</p>
+</td><td colspan="1" rowspan="1"><p>Ejemplo</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Describir síntoma</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Los productos no se cargan al inicio&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Localizar código</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Revisa loadData en KiddieMartContext.tsx&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Dar contexto técnico</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Usa IndexedDB, la DB empieza vacía&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Pedir paso a paso</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Muéstrame el flujo de datos&#34;</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¡Felicitaciones!" duration="0">
+        <p>🎉 ¡Has completado el Reto 7!</p>
+<h2 is-upgraded>Lo que aprendiste</h2>
+<ul>
+<li>Cómo hacer debugging efectivo con Gemini CLI</li>
+<li>Cómo escribir prompts de debugging precisos</li>
+<li>La importancia de reproducir, diagnosticar y verificar</li>
+</ul>
+<h2 is-upgraded>Lo que corregiste</h2>
+<ul>
+<li>Bug en <code>loadData()</code> que impedía la carga de productos iniciales</li>
+</ul>
+<h2 is-upgraded>Siguiente paso</h2>
+<p>Continúa con el <strong>Reto 8: Resolver Problema de Margin</strong> — otro bug visual espera tu diagnóstico.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-02-14T10:45:59-05:00",
+  "id": "feature-upload-ai",
+  "duration": 6,
+  "title": "Reto 10: Nueva Feature — Upload de Productos con AI",
+  "authors": "Carlos Prieto",
+  "summary": "Crear un sistema de upload de productos con detección de metadata por AI",
+  "source": "10-feature-upload-ai.md",
+  "theme": "",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "ai",
+    "developertools",
+    "machinelearning"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/cprietorod/kiddie-mart/issues",
+  "url": "feature-upload-ai"
+}
