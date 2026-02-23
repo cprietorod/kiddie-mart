@@ -89,7 +89,7 @@ export function ProductList() {
         </div>
       </div>
       <ScrollArea className="flex-grow">
-        <div className="p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 -ml-8 mt-24">
           {filteredProducts.length > 0 ? (
             filteredProducts.map(product => (
               <div key={product.id} onClick={() => handleProductClick(product)} className="cursor-pointer">

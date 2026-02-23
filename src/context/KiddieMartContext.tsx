@@ -65,8 +65,8 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
       setIsLoadingData(true);
       try {
         await openDB();
-        let dbProducts = await getAllProducts();
-        if (dbProducts.length === 0) {
+        let dbProducts = await getAllProducts() || undefined;
+        if (dbProducts?.length === 0) {
           console.log('No products in DB, seeding initial products...');
           await bulkAddProductsDB(INITIAL_PRODUCTS);
           dbProducts = INITIAL_PRODUCTS;
