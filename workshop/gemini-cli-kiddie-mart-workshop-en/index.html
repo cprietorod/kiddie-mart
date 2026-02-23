@@ -1,0 +1,1293 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Gemini CLI Workshop: Learn to Code with AI using Kiddie Mart</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="gemini-cli-kiddie-mart-workshop-en"
+                  title="Gemini CLI Workshop: Learn to Code with AI using Kiddie Mart"
+                  environment="web"
+                  feedback-link="https://github.com/cprietorod/kiddie-mart/issues">
+    
+      <google-codelab-step label="Welcome" duration="1">
+        <p>Welcome to the <strong>Gemini CLI Workshop</strong>! 🎉</p>
+<p>In this workshop you&#39;ll learn to use <strong>Gemini CLI</strong> as your AI development assistant while working on a real project: <strong>Kiddie Mart</strong>, an educational POS (Point of Sale) application for kids.</p>
+<h2 is-upgraded>What is Gemini CLI?</h2>
+<p>Gemini CLI is a command-line tool that lets you interact with Google&#39;s AI models directly from your terminal. It&#39;s like having a senior developer sitting next to you, helping you with:</p>
+<ul>
+<li>🔍 Analyzing and understanding existing code</li>
+<li>📝 Generating professional documentation</li>
+<li>🐛 Finding and fixing bugs</li>
+<li>✨ Implementing new features</li>
+<li>🏗️ Refactoring code</li>
+</ul>
+<h2 is-upgraded>What is Kiddie Mart?</h2>
+<p>Kiddie Mart is an educational POS app designed to teach kids about buying and selling. It&#39;s built with:</p>
+<ul>
+<li><strong>Next.js</strong> + <strong>React</strong> + <strong>TypeScript</strong></li>
+<li><strong>Tailwind CSS</strong> with a pastel kids theme</li>
+<li><strong>IndexedDB</strong> for local persistence</li>
+<li><strong>Internationalization</strong> (Spanish/English) with <code>next-intl</code></li>
+<li><strong>PWA</strong> for offline use</li>
+<li><strong>Genkit</strong> for AI features</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="What you&#39;ll learn" duration="1">
+        <ul>
+<li>✅ Install and configure Gemini CLI</li>
+<li>✅ Create context files (<code>GEMINI.md</code>) to improve AI responses</li>
+<li>✅ Generate professional documentation with AI assistance</li>
+<li>✅ Diagnose and fix bugs with AI help</li>
+<li>✅ Implement new features guided by Gemini CLI</li>
+<li>✅ Integrate services like Firebase and AI Vision</li>
+<li>✅ Write effective prompts for development</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="1">
+        <h2 is-upgraded>Required knowledge</h2>
+<ul>
+<li><strong>JavaScript/TypeScript</strong> fundamentals</li>
+<li>Basic <strong>React</strong> concepts (components, state, props)</li>
+<li>Basic <strong>terminal/command line</strong> usage</li>
+<li>Familiarity with <strong>Git</strong></li>
+</ul>
+<h2 is-upgraded>Required software</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Tool</p>
+</td><td colspan="1" rowspan="1"><p>Minimum version</p>
+</td><td colspan="1" rowspan="1"><p>Verify with</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Node.js</p>
+</td><td colspan="1" rowspan="1"><p>18+</p>
+</td><td colspan="1" rowspan="1"><p><code>node --version</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>npm</p>
+</td><td colspan="1" rowspan="1"><p>9+</p>
+</td><td colspan="1" rowspan="1"><p><code>npm --version</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Git</p>
+</td><td colspan="1" rowspan="1"><p>2.x</p>
+</td><td colspan="1" rowspan="1"><p><code>git --version</code></p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Code editor</p>
+</td><td colspan="1" rowspan="1"><p>VS Code recommended</p>
+</td><td colspan="1" rowspan="1"><p>—</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Modern browser</p>
+</td><td colspan="1" rowspan="1"><p>Chrome/Edge/Firefox</p>
+</td><td colspan="1" rowspan="1"><p>—</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Required credentials</h2>
+<ul>
+<li>Google account (for Gemini API Key)</li>
+<li>(Optional) Firebase account for the last challenge</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Workshop structure" duration="1">
+        <p>The workshop is divided into <strong>4 modules</strong> with <strong>11 progressive challenges</strong>:</p>
+<h2 is-upgraded>Module 1: Setup (Challenges 1-2)</h2>
+<p>Install Gemini CLI and configure project context.</p>
+<h2 is-upgraded>Module 2: Documentation (Challenges 3-6)</h2>
+<p>Generate documentation, create a task runner, and install the project.</p>
+<h2 is-upgraded>Module 3: Bug Fixing (Challenges 7-8)</h2>
+<p>Use Gemini CLI to diagnose and fix real bugs.</p>
+<h2 is-upgraded>Module 4: New Features (Challenges 9-11)</h2>
+<p>Implement complete features with AI help: themes, AI upload, and Firebase.</p>
+<aside class="special"><p> Each challenge is independent but we recommend following the order. Module 4 challenges are the most advanced. </p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Let&#39;s get started!" duration="1">
+        <p>The project code is in the <strong>kiddie-mart</strong> repository. If you haven&#39;t cloned it yet:</p>
+<pre><code language="language-bash" class="language-bash">git clone &lt;REPOSITORY_URL&gt;
+cd kiddie-mart
+git checkout workshop-start
+</code></pre>
+<aside class="special"><p> Make sure you&#39;re on the `workshop-start` branch. This branch has everything set up for the workshop, including some bugs you&#39;ll fix later 😉 </p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 1: Install Gemini CLI" duration="1">
+        <p>In this first challenge you&#39;ll install <strong>Gemini CLI</strong> on your machine and verify it works correctly. Gemini CLI is your gateway to AI-assisted programming from the terminal.</p>
+<h2 is-upgraded>Step 1: Install the package globally</h2>
+<p>Open your terminal and run:</p>
+<pre><code language="language-bash" class="language-bash">npm install -g @anthropic-ai/gemini-cli
+</code></pre>
+<aside class="special"><p> If you have permission issues on macOS/Linux, you can use `sudo npm install -g @anthropic-ai/gemini-cli` or configure npm to install global packages without sudo. </p>
+</aside>
+<h2 is-upgraded>Step 2: Verify the installation</h2>
+<pre><code language="language-bash" class="language-bash">gemini --version
+</code></pre>
+<p>You should see a version number like <code>1.x.x</code>. If you see a &#34;command not found&#34; error, verify that npm&#39;s global directory is in your PATH.</p>
+<aside class="warning"><p> If `gemini --version` doesn&#39;t work, try closing and reopening your terminal, or run `npx @anthropic-ai/gemini-cli --version` as an alternative. </p>
+</aside>
+<h2 is-upgraded>Step 3: Authentication</h2>
+<p>There are two ways to authenticate with Gemini CLI:</p>
+<p><strong>Option A: Login with Google account (recommended)</strong></p>
+<pre><code language="language-bash" class="language-bash">gemini auth login
+</code></pre>
+<p>This will open your browser for Google account authentication. Follow the on-screen instructions.</p>
+<p><strong>Option B: API Key</strong></p>
+<p>If you have a Gemini API Key, you can set it as an environment variable:</p>
+<pre><code language="language-bash" class="language-bash">export GEMINI_API_KEY=&#34;your-api-key-here&#34;
+</code></pre>
+<p>To get an API Key:</p>
+<ol type="1">
+<li>Go to <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></li>
+<li>Click &#34;Create API Key&#34;</li>
+<li>Copy the generated key</li>
+</ol>
+<aside class="special"><p> For the workshop, the instructor will provide backup API Keys if you have authentication issues. </p>
+</aside>
+<h2 is-upgraded>Step 4: Your first interaction</h2>
+<p>Time to test that everything works! Run:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Hello! Tell me in one line what you are and what you can do&#34;
+</code></pre>
+<p>You should see an AI model response in your terminal.</p>
+<h2 is-upgraded>Step 5: Interactive mode</h2>
+<p>Gemini CLI also has an interactive mode where you can have a continuous conversation:</p>
+<pre><code language="language-bash" class="language-bash">gemini
+</code></pre>
+<p>This will open an interactive session. Try typing:</p>
+<pre><code>&gt; Explain what a package.json file is in 3 bullet points
+</code></pre>
+<p>To exit interactive mode, type <code>/exit</code> or press <code>Ctrl+C</code>.</p>
+<aside class="special"><p> Interactive mode is very useful when working on a project and you want to ask several questions in a row without losing context. </p>
+</aside>
+<h2 is-upgraded>Verification</h2>
+<p>Before continuing, make sure you can answer <strong>yes</strong> to all these questions:</p>
+<ul>
+<li>[ ] Does <code>gemini --version</code> show a version number?</li>
+<li>[ ] Can you run <code>gemini "hello"</code> and get a response?</li>
+<li>[ ] Can you enter interactive mode with <code>gemini</code>?</li>
+</ul>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Problem</p>
+</td><td colspan="1" rowspan="1"><p>Solution</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>command not found</code></p>
+</td><td colspan="1" rowspan="1"><p>Verify that npm global is in your PATH</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Authentication error</p>
+</td><td colspan="1" rowspan="1"><p>Try API Key instead of login</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Timeout</p>
+</td><td colspan="1" rowspan="1"><p>Check your internet connection</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Rate limit</p>
+</td><td colspan="1" rowspan="1"><p>Wait a few seconds and try again</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 2: Setup GEMINI.md" duration="1">
+        <p>In this challenge you&#39;ll learn to create a <strong>GEMINI.md</strong> file — a special file that gives Gemini CLI context about your project. Think of it as a &#34;briefing&#34; that makes Gemini&#39;s responses much more accurate and relevant.</p>
+<h2 is-upgraded>What is GEMINI.md?</h2>
+<p><code>GEMINI.md</code> is a Markdown file placed at the root of your project. When Gemini CLI runs inside a directory that has this file, it automatically reads it to understand:</p>
+<ul>
+<li><strong>What the project does</strong> — to give purpose-aligned responses</li>
+<li><strong>What technologies it uses</strong> — to suggest compatible code</li>
+<li><strong>What the structure is</strong> — to know where relevant files are</li>
+<li><strong>What conventions it follows</strong> — to maintain code consistency</li>
+<li><strong>How to run it</strong> — to give accurate instructions</li>
+</ul>
+<h2 is-upgraded>Without context vs. With context</h2>
+<p><strong>Without </strong></p>
+<p><strong><code>GEMINI.md</code></strong>, if you ask Gemini: <em>&#34;Add a button to the header&#34;</em>, it has to guess:</p>
+<ul>
+<li>React? Vue? Angular?</li>
+<li>Tailwind? CSS Modules? styled-components?</li>
+<li>Where is the header?</li>
+</ul>
+<p><strong>With </strong></p>
+<p><strong><code>GEMINI.md</code></strong>, Gemini already knows you use React with Tailwind CSS and that the header is in <code>src/components/kiddie-mart/AppHeader.tsx</code>.</p>
+<h2 is-upgraded>Step 1: Explore the project first</h2>
+<p>Before asking Gemini to create the file, let&#39;s understand what&#39;s in the project. Navigate to the project directory:</p>
+<pre><code language="language-bash" class="language-bash">cd kiddie-mart
+</code></pre>
+<p>Use Gemini CLI to explore:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analyze this project&#39;s structure. Tell me:
+1. What framework it uses
+2. What the main directories in src/ are
+3. What important dependencies are in package.json
+4. What configuration files exist at the root&#34;
+</code></pre>
+<aside class="special"><p> Notice how Gemini can read and analyze project files directly from the terminal. This is one of its most powerful capabilities. </p>
+</aside>
+<h2 is-upgraded>Step 2: Create GEMINI.md with Gemini CLI</h2>
+<p>Now, ask Gemini to create the file:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analyze this entire project and create a GEMINI.md file at the root 
+that includes:
+
+1. Project description (Kiddie Mart - educational POS for kids)
+2. Complete tech stack
+3. Project structure (main directories and their purpose)
+4. How to run the project in development
+5. Project code conventions
+6. Visual style and theme (check globals.css and docs/blueprint.md)
+7. Design patterns used (Context/Provider, hooks, etc.)
+8. Important files a new developer should know about
+
+The file should be concise but complete, aimed at helping an AI 
+quickly understand the project.&#34;
+</code></pre>
+<p>Gemini CLI will read various project files, analyze the structure, identify patterns and technologies, and generate a coherent Markdown file.</p>
+<h2 is-upgraded>Step 3: Review and adjust</h2>
+<p>Open the generated file:</p>
+<pre><code language="language-bash" class="language-bash">cat GEMINI.md
+</code></pre>
+<p>Verify it includes:</p>
+<ul>
+<li>[ ] Project name and description</li>
+<li>[ ] Next.js, React, TypeScript, Tailwind CSS mentioned</li>
+<li>[ ] IndexedDB as storage</li>
+<li>[ ] <code>next-intl</code> for internationalization</li>
+<li>[ ] Folder structure (<code>src/app</code>, <code>src/components</code>, <code>src/context</code>, etc.)</li>
+<li>[ ] <code>npm run dev</code> command or port <code>9002</code></li>
+<li>[ ] Reference to pastel colors and kids theme</li>
+</ul>
+<p>If something&#39;s missing, ask Gemini to improve it:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Review the GEMINI.md you just created. It&#39;s missing:
+- The project uses PWA with @ducanh2912/next-pwa
+- It has QR support with @yudiel/react-qr-scanner
+- It uses Genkit for AI features
+Update the file with this information.&#34;
+</code></pre>
+<aside class="special"><p> It doesn&#39;t have to be perfect the first time. Iterating with Gemini is part of the workflow. You can refine the file as many times as you need. </p>
+</aside>
+<h2 is-upgraded>Step 4: Test the context impact</h2>
+<p>To see the difference <code>GEMINI.md</code> makes, try these questions:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;How can I add a new product to the store? 
+What files do I need to modify?&#34;
+</code></pre>
+<p>Gemini should respond mentioning specific files like <code>KiddieMartContext.tsx</code>, <code>ProductManagement.tsx</code>, and the types in <code>kiddieMart.ts</code>.</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;If I wanted to add a new button to the app, what colors 
+and styles should I use to maintain consistency?&#34;
+</code></pre>
+<p>It should mention pastel colors, custom CSS variables, and the project&#39;s Tailwind classes.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 3: Create README.md" duration="1">
+        <p>The current Kiddie Mart <code>README.md</code> has only 3 generic lines. In this challenge, you&#39;ll use Gemini CLI to generate a professional and complete README.</p>
+<h2 is-upgraded>Step 1: See the problem</h2>
+<p>Check the current README:</p>
+<pre><code language="language-bash" class="language-bash">cat README.md
+</code></pre>
+<p>You&#39;ll see something like:</p>
+<pre><code language="language-markdown" class="language-markdown"># Firebase Studio
+
+This is a NextJS starter in Firebase Studio.
+
+To get started, take a look at src/app/page.tsx.
+</code></pre>
+<p>This tells a new developer nothing useful. Let&#39;s change that!</p>
+<h2 is-upgraded>Step 2: Generate the README with Gemini CLI</h2>
+<p>Use Gemini CLI to generate a complete README:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The current README.md is almost empty. I need you to create a 
+professional and complete README.md for Kiddie Mart. It should include:
+
+1. Title with emoji and badge placeholders (build status, license, etc.)
+2. Brief and attractive project description (it&#39;s an educational POS for kids)
+3. Screenshot placeholder (image)
+4. &#39;Features&#39; section with list of main features
+5. &#39;Tech Stack&#39; section with technologies used
+6. &#39;Getting Started&#39; section with:
+   - Prerequisites (Node.js 18+, npm)
+   - Installation (git clone, npm install)
+   - Running (npm run dev, port 9002)
+7. &#39;Project Structure&#39; section with simplified directory tree
+8. &#39;Available Scripts&#39; section with package.json commands
+9. Basic &#39;Contributing&#39; section
+10. &#39;License&#39; section
+
+The tone should be friendly and professional. Use emojis where appropriate.
+The project is built with Next.js, TypeScript, Tailwind CSS, IndexedDB, 
+next-intl for i18n, and is a PWA.&#34;
+</code></pre>
+<aside class="special"><p> Notice how a detailed prompt produces a much more complete result. Specificity is key when working with AI tools. </p>
+</aside>
+<h2 is-upgraded>Step 3: Review the result</h2>
+<p>Once Gemini generates the file, review it:</p>
+<pre><code language="language-bash" class="language-bash">cat README.md
+</code></pre>
+<p>Verify the generated README includes:</p>
+<ul>
+<li>[ ] Descriptive title with &#34;Kiddie Mart&#34; name</li>
+<li>[ ] Description explaining what it is and who it&#39;s for</li>
+<li>[ ] List of main features</li>
+<li>[ ] Complete tech stack</li>
+<li>[ ] Clear installation instructions</li>
+<li>[ ] Command to run in development (<code>npm run dev</code>)</li>
+<li>[ ] Correct port (9002)</li>
+<li>[ ] Directory structure</li>
+<li>[ ] Available scripts</li>
+</ul>
+<h2 is-upgraded>Step 4: Refine the README</h2>
+<p>If the README needs adjustments, you can request specific changes:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The README.md is missing a section about internationalization. 
+Add a &#39;## 🌐 Internationalization&#39; section explaining that the app 
+supports Spanish and English using next-intl, and that translation 
+files are in messages/es.json and messages/en.json&#34;
+</code></pre>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The &#39;Getting Started&#39; section in the README needs to also 
+include the &#39;make setup&#39; command from the Makefile as an alternative. 
+Update that section.&#34;
+</code></pre>
+<aside class="special"><p> Iterating with small, specific changes is more effective than regenerating the entire document from scratch. </p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 4: Create Onboarding Documentation" duration="1">
+        <p>Onboarding documentation is crucial for new developers to contribute quickly to a project. In this challenge, you&#39;ll use Gemini CLI to generate a comprehensive guide explaining the architecture, design patterns, and main flows of Kiddie Mart.</p>
+<h2 is-upgraded>Step 1: Analyze the architecture</h2>
+<p>Before documenting, it&#39;s good to understand what&#39;s there. Use Gemini CLI to analyze the architecture:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analyze this application&#39;s architecture and give me a summary of:
+
+1. The state management pattern (check src/context/)
+2. Custom hooks (check src/hooks/)
+3. Component structure (check src/components/kiddie-mart/)
+4. Data service (check src/lib/indexedDbService.ts)
+5. Type system (check src/types/)
+6. Internationalization system (check src/i18n/ and messages/)
+
+Give me a text diagram of how these modules connect.&#34;
+</code></pre>
+<aside class="special"><p> Gemini CLI can read multiple files and give you a complete architecture overview. This is much faster than reading all the code manually. </p>
+</aside>
+<p>You should get an analysis that describes:</p>
+<ul>
+<li><code>KiddieMartContext</code> as the app&#39;s central state</li>
+<li><code>KiddieMartProvider</code> as the provider wrapping the app</li>
+<li>Hooks like <code>useKiddieMart</code> to access state</li>
+<li><code>indexedDbService</code> as the persistence layer</li>
+</ul>
+<h2 is-upgraded>Step 2: Generate the Onboarding documentation</h2>
+<p>Now generate the complete documentation:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Create a docs/ONBOARDING.md file with an onboarding guide for 
+new developers. It should include these sections:
+
+## 1. Environment requirements
+- Node.js, npm, recommended editor
+
+## 2. Project setup
+- Clone, install, run step by step
+
+## 3. Application architecture
+- Component diagram in text/mermaid
+- Context/Provider pattern explanation
+- Data flow from UI to IndexedDB
+
+## 4. Directory structure
+- Explanation of each folder in src/
+
+## 5. Data system
+- How IndexedDB works in the project
+- Where mock data is (kiddieMartMockData.ts)
+- What models/types are used (types/kiddieMart.ts)
+
+## 6. Internationalization (i18n)
+- How next-intl works
+- Where translation files are
+- How to add new translations
+
+## 7. Main app flow
+- Login → Role selection → POS → Add to cart → Payment
+- Admin panel
+
+## 8. Style guide
+- CSS variables in globals.css
+- Pastel kids theme
+- Most used Tailwind classes
+
+## 9. Troubleshooting
+- Common problems and solutions
+
+Use code examples where relevant. The documentation should be 
+clear and friendly.&#34;
+</code></pre>
+<h2 is-upgraded>Step 3: Review and complete</h2>
+<p>Review the generated file:</p>
+<pre><code language="language-bash" class="language-bash">cat docs/ONBOARDING.md
+</code></pre>
+<p>Check quality:</p>
+<ul>
+<li>[ ] Are installation commands correct?</li>
+<li>[ ] Does the architecture description reflect the actual code?</li>
+<li>[ ] Are file and folder names correct?</li>
+<li>[ ] Are code examples functional?</li>
+</ul>
+<p>If needed, request improvements:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;In docs/ONBOARDING.md, I need the Architecture section to include 
+a mermaid diagram showing the relationship between:
+- App Layout → KiddieMartProvider → Child Components
+- KiddieMartContext → indexedDbService → IndexedDB
+Update that section.&#34;
+</code></pre>
+<aside class="warning"><p> Don&#39;t blindly trust generated documentation. Always verify that file names, paths, and commands are correct by checking the actual source code. </p>
+</aside>
+<h2 is-upgraded>Step 4: Test the documentation</h2>
+<p>The best way to validate onboarding documentation is to follow it step by step as if you were a new developer:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Read the docs/ONBOARDING.md we created and verify that:
+1. All mentioned files actually exist in the project
+2. Listed commands are correct according to package.json
+3. Component and function names match the code
+Tell me if you find any inconsistencies.&#34;
+</code></pre>
+<aside class="special"><p> Using Gemini CLI to verify documentation generated by Gemini CLI! This is a useful cross-validation technique. </p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 5: Setup Conductor (Task Runner)" duration="1">
+        <p>A <strong>conductor</strong> or <strong>task runner</strong> is a tool that simplifies running frequent commands in a project. Instead of remembering <code>npm run dev -- -p 9002</code> or <code>npx next lint</code>, you simply type <code>make dev</code> or <code>make lint</code>.</p>
+<p>In this challenge, you&#39;ll use Gemini CLI to create a <code>Makefile</code> that serves as the project&#39;s task runner.</p>
+<h2 is-upgraded>Why a Makefile?</h2>
+<p><code>Makefile</code>s are a standard and universal way to define tasks in software projects. Their advantages:</p>
+<ul>
+<li>📋 <strong>Self-documenting</strong> — <code>make help</code> shows all available commands</li>
+<li>🔧 <strong>Universal</strong> — <code>make</code> comes pre-installed on macOS and Linux</li>
+<li>🏃 <strong>Fast</strong> — no additional dependencies to install</li>
+<li>📦 <strong>Composable</strong> — you can combine multiple commands into a single target</li>
+</ul>
+<p>The project already has scripts in <code>package.json</code>:</p>
+<pre><code language="language-json" class="language-json">{
+  &#34;scripts&#34;: {
+    &#34;dev&#34;: &#34;next dev -p 9002&#34;,
+    &#34;build&#34;: &#34;next build &amp;&amp; node fix-sw.js&#34;,
+    &#34;start&#34;: &#34;next start&#34;,
+    &#34;lint&#34;: &#34;next lint&#34;,
+    &#34;typecheck&#34;: &#34;tsc --noEmit&#34;
+  }
+}
+</code></pre>
+<p>The Makefile will be a layer on top of these scripts that makes them more accessible and adds extra functionality.</p>
+<h2 is-upgraded>Step 1: Generate the Makefile with Gemini CLI</h2>
+<p>Ask Gemini CLI to create the Makefile:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Create a Makefile for this Next.js project with the following targets:
+
+- make help       → Show all available targets with descriptions
+- make install    → npm install
+- make dev        → npm run dev (development server on port 9002)
+- make build      → npm run build
+- make lint       → npm run lint
+- make typecheck  → npm run typecheck
+- make clean      → Remove .next and node_modules
+- make setup      → Do install + verify that Node.js is &gt;= 18
+
+Each target should have a comment with ## so &#39;make help&#39; works.
+The Makefile should use .PHONY for all targets.
+Include a colorful banner in make help with the project name.&#34;
+</code></pre>
+<aside class="special"><p> If a Makefile already exists (from the workshop preparation step), Gemini will detect it and ask if you want to replace or update it. Tell it to replace with the improved version. </p>
+</aside>
+<h2 is-upgraded>Step 2: Test the targets</h2>
+<p>Test each target to verify it works:</p>
+<pre><code language="language-bash" class="language-bash"># See all available commands
+make help
+
+# Install dependencies (if you haven&#39;t yet)
+make install
+
+# Check types
+make typecheck
+
+# Run linter
+make lint
+</code></pre>
+<p>The <code>make help</code> output should look something like:</p>
+<pre><code>🛒 Kiddie Mart - Available Commands
+======================================
+  build          Build the project for production
+  clean          Remove build artifacts and node_modules  
+  dev            Start development server on port 9002
+  help           Show available targets
+  install        Install project dependencies
+  lint           Run linter
+  setup          Full project setup (install + verify)
+  typecheck      Run TypeScript type checking
+</code></pre>
+<h2 is-upgraded>Step 3: Add advanced targets</h2>
+<p>Now ask Gemini CLI to add more advanced targets:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Add these additional targets to the existing Makefile:
+
+- make dev-open    → Run dev and automatically open the browser
+- make check-all   → Run lint + typecheck together
+- make reset-db    → Clear IndexedDB data (info on how to do it)
+- make i18n-check  → Verify translation files have the same keys 
+                     (compare messages/en.json and messages/es.json)
+
+Keep the existing format with ## comments and .PHONY&#34;
+</code></pre>
+<aside class="special"><p> Notice how you can iterate on the Makefile by requesting additional targets without regenerating everything. Gemini understands the existing file and adds without breaking. </p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 6: Install and Run the Project" duration="1">
+        <p>Now that your task runner is ready, it&#39;s time to install dependencies and run Kiddie Mart. In this challenge you&#39;ll start the app in development mode and explore its features.</p>
+<h2 is-upgraded>Step 1: Install dependencies</h2>
+<p>Use the Makefile to install:</p>
+<pre><code language="language-bash" class="language-bash">make install
+</code></pre>
+<p>This will run <code>npm install</code> and install all project dependencies.</p>
+<aside class="warning"><p> If you see errors during installation, your Node.js version is likely incompatible. Verify with `node --version` that you have version 18 or higher. </p>
+</aside>
+<p>If installation fails, you can ask Gemini CLI for help:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;npm installation failed with the following error: [paste error here]. 
+How can I fix it?&#34;
+</code></pre>
+<aside class="special"><p> Gemini CLI is excellent at diagnosing installation errors. Copy and paste the complete error to get the best response. </p>
+</aside>
+<h2 is-upgraded>Step 2: Run in development mode</h2>
+<p>Start the development server:</p>
+<pre><code language="language-bash" class="language-bash">make dev
+</code></pre>
+<p>Or if you prefer the direct command:</p>
+<pre><code language="language-bash" class="language-bash">npm run dev
+</code></pre>
+<p>You should see something like:</p>
+<pre><code>▲ Next.js 15.2.3
+- Local:        http://localhost:9002
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 3.2s
+</code></pre>
+<p>Open your browser at <strong>http://localhost:9002</strong>.</p>
+<h2 is-upgraded>Step 3: Explore the application</h2>
+<p>With the app running, explore the main features:</p>
+<p><strong>Login Screen</strong></p>
+<p>The first screen shows two role options:</p>
+<ul>
+<li><strong>👨‍💼 Admin</strong> — Access to the admin panel</li>
+<li><strong>🧑‍💻 Staff</strong> — Access to the POS (Point of Sale)</li>
+</ul>
+<p><strong>As Staff (POS)</strong></p>
+<ol type="1">
+<li>Select the <strong>Staff</strong> role</li>
+<li>You&#39;ll see the <strong>product grid</strong> (you might notice a visual bug here 👀)</li>
+<li>Click products to add them to the cart</li>
+<li>The <strong>cart</strong> appears on the right side</li>
+<li>Test the <strong>payment</strong> process (cash, card, QR)</li>
+</ol>
+<p><strong>As Admin</strong></p>
+<ol type="1">
+<li>Go back to login and select <strong>Admin</strong></li>
+<li>Explore the <strong>Dashboard</strong> with statistics</li>
+<li>Go to <strong>Products</strong> to manage inventory</li>
+<li>Check <strong>Sales History</strong></li>
+<li>Explore <strong>Wallet Management</strong> for QR payments</li>
+</ol>
+<aside class="special"><p> Did you notice anything weird with the product layout? Or with the initial data loading? Don&#39;t worry, those are the bugs you&#39;ll fix in the next challenges! 🐛 </p>
+</aside>
+<h2 is-upgraded>Step 4: Verify the app state</h2>
+<p>Use Gemini CLI to verify the app is working correctly:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The app is running at http://localhost:9002. 
+Can you review the code and tell me:
+1. What user roles exist?
+2. How many products should there be by default?
+3. What payment methods are available?
+4. Does the app support offline mode?&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 7: Fix Load State Bug" duration="1">
+        <p>Time to do some debugging with AI! In this challenge, you&#39;ll use Gemini CLI to find and fix a real bug in the application&#39;s state loading.</p>
+<p><strong>The problem:</strong> When opening the app for the first time, <strong>products don&#39;t load correctly</strong>. Sometimes the list appears empty and default products aren&#39;t shown.</p>
+<h2 is-upgraded>Step 1: Reproduce the bug</h2>
+<p>First, let&#39;s confirm the bug:</p>
+<ol type="1">
+<li>Open the app at <strong>http://localhost:9002</strong></li>
+<li>Log in as <strong>Staff</strong></li>
+<li>Look at the product list</li>
+</ol>
+<p>The expected behavior is seeing a list of products with icons, names, and prices. But you might see:</p>
+<ul>
+<li>An empty list</li>
+<li>A &#34;no products&#34; message</li>
+</ul>
+<p>To reproduce, clear IndexedDB:</p>
+<ol type="1">
+<li>Open DevTools (<code>F12</code> or <code>Cmd+Opt+I</code>)</li>
+<li>Go to <strong>Application</strong> → <strong>IndexedDB</strong></li>
+<li>Delete the <code>KiddieMartDB</code> database</li>
+<li>Reload the page</li>
+</ol>
+<aside class="warning"><p> The bug is related to initial data loading. If data is already in IndexedDB from a previous session, the bug might not be immediately visible. </p>
+</aside>
+<h2 is-upgraded>Step 2: Ask Gemini CLI for help</h2>
+<p>Now, ask Gemini CLI to analyze the problem:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;There&#39;s a bug in the application: when opened for the first time 
+(without data in IndexedDB), products don&#39;t load and the list 
+appears empty. 
+
+The problem is in the initial state loading. Check:
+1. src/context/KiddieMartContext.tsx - the loadData function
+2. src/lib/indexedDbService.ts - the getAllProducts function
+
+Look for issues in how return values from IndexedDB functions 
+are handled, especially when the DB is empty.&#34;
+</code></pre>
+<p>Gemini CLI will analyze the code and should identify a problem with how <code>getAllProducts()</code> return value is handled.</p>
+<aside class="special"><p> Notice how a prompt with specific context (file name, function name, symptom) produces a much more precise diagnosis than simply saying &#34;the app doesn&#39;t work&#34;. </p>
+</aside>
+<h2 is-upgraded>Step 3: Understand the root cause</h2>
+<p>Ask Gemini to explain the root cause in detail:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Explain in detail the root cause of the bug in loadData. 
+What exact line causes the problem and why? 
+Show me the data flow step by step.&#34;
+</code></pre>
+<p>The bug is subtle:</p>
+<ol type="1">
+<li><code>getAllProducts()</code> returns <code>[]</code> (empty array) when the DB is empty</li>
+<li>An empty array <code>[]</code> is <strong>truthy</strong> in JavaScript</li>
+<li>The code should check <code>dbProducts.length === 0</code> directly</li>
+</ol>
+<h2 is-upgraded>Step 4: Apply the fix</h2>
+<p>Ask Gemini to apply the fix:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Fix the bug in the loadData function of 
+src/context/KiddieMartContext.tsx. 
+The fix should:
+1. Correctly handle the case when getAllProducts returns an empty array
+2. Ensure initial product seeding works
+3. Not change behavior when products already exist in the DB&#34;
+</code></pre>
+<h2 is-upgraded>Step 5: Verify the fix</h2>
+<p>After Gemini applies the change:</p>
+<ol type="1">
+<li>Open DevTools → <strong>Application</strong> → <strong>IndexedDB</strong></li>
+<li>Delete <code>KiddieMartDB</code></li>
+<li>Reload the page</li>
+<li>Products should now appear correctly 🎉</li>
+</ol>
+<h2 is-upgraded>Reflection: Debugging with AI</h2>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Technique</p>
+</td><td colspan="1" rowspan="1"><p>Example</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Describe symptom</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Products don&#39;t load on first launch&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Localize code</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Check loadData in KiddieMartContext.tsx&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Give technical context</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Uses IndexedDB, DB starts empty&#34;</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Ask step by step</p>
+</td><td colspan="1" rowspan="1"><p>&#34;Show me the data flow&#34;</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 8: Fix Margin/Layout Issue" duration="1">
+        <p>In this challenge there&#39;s a visual bug: the product grid appears shifted with incorrect spacing. You&#39;ll use Gemini CLI to diagnose a CSS/Tailwind problem and fix it.</p>
+<p><strong>The problem:</strong></p>
+<ul>
+<li>A <strong>negative left margin</strong> shifting the grid outside its container</li>
+<li><strong>Excessive space above</strong> separating the grid from the filter too much</li>
+</ul>
+<h2 is-upgraded>Step 1: Observe the bug</h2>
+<ol type="1">
+<li>Open the app at <strong>http://localhost:9002</strong></li>
+<li>Log in as <strong>Staff</strong></li>
+<li>Look at the product grid</li>
+</ol>
+<p>You should see:</p>
+<ul>
+<li>Products <strong>shifted to the left</strong></li>
+<li>Part of the content going outside the visible area</li>
+<li>A <strong>large gap</strong> between the search/filter and the products</li>
+<li>The overall layout looks broken</li>
+</ul>
+<h2 is-upgraded>Step 2: Diagnose with Gemini CLI</h2>
+<p>Describe the visual problem to Gemini CLI:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;There&#39;s a visual problem in the app: the product grid 
+(the main list showing products for sale) appears shifted to the 
+left, as if going outside its container, and also has excessive 
+space above between the search bar and the grid.
+
+The problem seems to be CSS/Tailwind. Check the components 
+that render the product list:
+- src/components/kiddie-mart/ProductList.tsx
+- Look for Tailwind classes that might cause negative margins or 
+  excessive top margins&#34;
+</code></pre>
+<p>Gemini will identify suspicious Tailwind classes like:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Class</p>
+</td><td colspan="1" rowspan="1"><p>Effect</p>
+</td><td colspan="1" rowspan="1"><p>Problem?</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>-ml-8</code></p>
+</td><td colspan="1" rowspan="1"><p>Left margin -2rem (32px to the left)</p>
+</td><td colspan="1" rowspan="1"><p>✅ Yes!</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>mt-24</code></p>
+</td><td colspan="1" rowspan="1"><p>Top margin 6rem (96px above)</p>
+</td><td colspan="1" rowspan="1"><p>✅ Yes!</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>gap-4</code></p>
+</td><td colspan="1" rowspan="1"><p>1rem gap between grid items</p>
+</td><td colspan="1" rowspan="1"><p>❌ Normal</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>p-4</code></p>
+</td><td colspan="1" rowspan="1"><p>1rem padding on all sides</p>
+</td><td colspan="1" rowspan="1"><p>❌ Normal</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>grid-cols-2</code></p>
+</td><td colspan="1" rowspan="1"><p>2-column grid</p>
+</td><td colspan="1" rowspan="1"><p>❌ Normal</p>
+</td></tr>
+</table>
+<aside class="special"><p> CSS problems are ideal for diagnosing with AI because Tailwind classes are descriptive and easy to reason about. </p>
+</aside>
+<h2 is-upgraded>Step 3: Apply the fix</h2>
+<p>Ask Gemini to fix the problem:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Fix the layout problem in ProductList.tsx. 
+Remove the Tailwind classes causing the negative margin 
+and excessive space above. The product grid should:
+- Be aligned within its container
+- Have normal p-4 padding
+- Use responsive grid (2 cols → 5 cols by breakpoint)
+- Have no negative margins&#34;
+</code></pre>
+<h2 is-upgraded>Step 4: Verify the fix</h2>
+<ol type="1">
+<li>Save the changes</li>
+<li>Check the app in the browser (hot reload should apply changes)</li>
+<li>Verify that: <ul>
+<li>[ ] Products are correctly aligned</li>
+<li>[ ] No horizontal displacement</li>
+<li>[ ] Space between filter and products is reasonable</li>
+<li>[ ] Grid is responsive (columns change when resizing)</li>
+</ul>
+</li>
+</ol>
+<h2 is-upgraded>Step 5: Explore with DevTools</h2>
+<p>As an extra step, use DevTools to verify:</p>
+<ol type="1">
+<li>Open DevTools (<code>Cmd+Opt+I</code>)</li>
+<li>Use the element selector to inspect the grid</li>
+<li>Verify that the grid <code>div</code> has the correct classes</li>
+<li>In the <strong>Computed</strong> tab, verify there are no negative margins</li>
+</ol>
+<aside class="special"><p> Combining Gemini CLI with browser DevTools is a very powerful visual debugging workflow. </p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 9: New Feature — Theme Support" duration="1">
+        <p>Welcome to the first feature challenge! Here you&#39;ll implement a theme system that allows changing Kiddie Mart&#39;s visual appearance.</p>
+<h2 is-upgraded>What you&#39;ll build</h2>
+<ul>
+<li>A <strong>theme selector</strong> in the app header</li>
+<li>At least <strong>3 themes</strong>: Default (pastel), Dark Mode, and &#34;Candy&#34; (saturated colors)</li>
+<li><strong>Persistence</strong> of selected theme in <code>localStorage</code></li>
+<li><strong>Smooth transitions</strong> when changing themes</li>
+</ul>
+<h2 is-upgraded>Step 1: Analyze the current style system</h2>
+<p>Before implementing, understand the current style system:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analyze the app&#39;s style system:
+1. Check src/app/globals.css and explain the CSS variables defined
+2. Does dark mode support already exist? How does it work?
+3. What component renders the header? (check AppHeader.tsx)
+4. Is there any theming mechanism in KiddieMartContext?
+
+Give me a summary of what already exists and what we&#39;d need to add 
+to support multiple themes.&#34;
+</code></pre>
+<p>What you&#39;ll discover:</p>
+<ul>
+<li><code>globals.css</code> already has CSS variables for <code>:root</code> (light) and <code>.dark</code> (dark)</li>
+<li>Variables use HSL format (<code>210 15% 35%</code>)</li>
+<li>There&#39;s no theme toggle in the UI</li>
+<li>The context doesn&#39;t handle theme currently</li>
+</ul>
+<aside class="special"><p> Gemini CLI analyzes multiple files at once to give you a complete overview. This saves you minutes of manual code reading. </p>
+</aside>
+<h2 is-upgraded>Step 2: Implement the theme system</h2>
+<p>Now, request the full implementation:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;I want to add theme support to Kiddie Mart. 
+
+TECHNICAL CONTEXT:
+- globals.css already has CSS variables for light (:root) and dark (.dark)
+- Variables use HSL format without the hsl() function
+- The app uses Tailwind CSS
+- The header is in src/components/kiddie-mart/AppHeader.tsx
+- Global state is in src/context/KiddieMartContext.tsx
+
+REQUIREMENTS:
+1. Create a ThemeSelector component with at least 3 themes:
+   - &#39;default&#39;: The current pastel theme (what&#39;s in :root)
+   - &#39;dark&#39;: Dark mode (what&#39;s in .dark)
+   - &#39;candy&#39;: Theme with more vivid, saturated colors 
+     (pinks, purples, bright greens - candy style)
+
+2. Add the ThemeSelector to AppHeader.tsx with a palette or sun/moon icon
+
+3. Create a useTheme hook or add to existing context:
+   - Current theme state
+   - Function to change theme
+   - Persist in localStorage
+   - Read saved theme on load
+
+4. In globals.css, add CSS variables for the &#39;candy&#39; theme:
+   - primary: hot pink
+   - secondary: bright purple  
+   - accent: lime green
+   - background: very light pink
+   - Keep the same variable structure as existing themes
+
+5. Add smooth transition when changing themes:
+   - transition on body for background-color and color
+
+IMPORTANT: Don&#39;t modify the existing CSS variable structure, 
+only add new theme classes.&#34;
+</code></pre>
+<h2 is-upgraded>Step 3: Review the changes</h2>
+<p>Gemini will have modified/created several files. Review each one:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Show me a summary of all files you modified or created for the 
+theme feature. For each file, tell me what changed and why.&#34;
+</code></pre>
+<table>
+<tr><td colspan="1" rowspan="1"><p>File</p>
+</td><td colspan="1" rowspan="1"><p>Change</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/app/globals.css</code></p>
+</td><td colspan="1" rowspan="1"><p>New <code>.candy</code> theme with CSS variables</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/components/kiddie-mart/AppHeader.tsx</code></p>
+</td><td colspan="1" rowspan="1"><p>ThemeSelector added</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>New <code>ThemeSelector</code> component</p>
+</td><td colspan="1" rowspan="1"><p>Selector with icons/buttons</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/context/KiddieMartContext.tsx</code> or new hook</p>
+</td><td colspan="1" rowspan="1"><p>Theme state</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 4: Test the themes</h2>
+<p>With the app running, test each theme:</p>
+<ol type="1">
+<li><strong>Default</strong> — Soft pastel colors (mint, lavender, yellow)</li>
+<li><strong>Dark</strong> — Dark background with muted colors</li>
+<li><strong>Candy</strong> — Vivid, saturated colors</li>
+</ol>
+<p>Verify:</p>
+<ul>
+<li>[ ] Theme selector visible in the header</li>
+<li>[ ] When changing theme, colors change smoothly</li>
+<li>[ ] Theme persists after page reload (<code>localStorage</code>)</li>
+<li>[ ] All components respect the theme (header, products, cart, modals)</li>
+<li>[ ] Text is readable in all themes</li>
+</ul>
+<p>If a component doesn&#39;t respect the theme:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The ShoppingCart.tsx component doesn&#39;t change colors when 
+I switch themes. It seems to have hardcoded colors instead of 
+using CSS variables. Can you review and fix it?&#34;
+</code></pre>
+<aside class="warning"><p> It&#39;s common when implementing themes for some components to have hardcoded colors (like `bg-white` instead of `bg-background`). If this happens, ask Gemini to fix them. </p>
+</aside>
+<h2 is-upgraded>Optional enhancement: Custom theme</h2>
+<p>If you have extra time, request a bonus feature:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Add the option for users to choose a custom primary color 
+to create their own theme.
+Add a color picker to the ThemeSelector that lets them 
+select a color and automatically generates derived CSS variables.&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 10: New Feature — Product Upload with AI" duration="1">
+        <p>This is the most innovative challenge in the workshop! You&#39;ll create a system where the admin can <strong>upload a product photo</strong> and Google&#39;s AI (Gemini Vision) automatically detects the name, category, and suggested price.</p>
+<h2 is-upgraded>What you&#39;ll build</h2>
+<ul>
+<li><strong>&#34;Upload with AI&#34;</strong> button in the product admin panel</li>
+<li>Modal to <strong>upload image or take a photo with the camera</strong></li>
+<li>Call to <strong>Gemini Vision</strong> to analyze the image</li>
+<li><strong>Auto-fill</strong> the new product form</li>
+<li>Complete flow: photo → AI → form → save</li>
+</ul>
+<h2 is-upgraded>Step 1: Understand the existing AI infrastructure</h2>
+<p>The project already has Genkit configured. Use Gemini CLI to understand what&#39;s there:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analyze the project&#39;s AI infrastructure:
+1. Check src/ai/ - what files are there and what do they do?
+2. Check package.json - what AI packages are installed?
+3. Is there any API route or server action for AI?
+4. How is Genkit configured in the project?
+
+Give me a summary of what already exists and what we&#39;d need to add 
+to analyze images with Gemini Vision.&#34;
+</code></pre>
+<aside class="special"><p> Genkit greatly simplifies AI model calls. Instead of handling HTTP requests manually, you define &#34;flows&#34; and the framework handles the rest. </p>
+</aside>
+<h2 is-upgraded>Step 2: Configure the API Key</h2>
+<p>For Gemini Vision to work, you need an API Key:</p>
+<ol type="1">
+<li>Go to <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a></li>
+<li>Copy your API Key</li>
+<li>Create or edit the <code>.env.local</code> file at the project root:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash">echo &#34;GOOGLE_GENAI_API_KEY=your-api-key-here&#34; &gt;&gt; .env.local
+</code></pre>
+<aside class="warning"><p> Never commit your API Key to the repository. The `.env.local` file is already in `.gitignore`. </p>
+</aside>
+<h2 is-upgraded>Step 3: Implement the AI Vision flow</h2>
+<p>Now, ask Gemini CLI to implement the complete flow:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;I want to implement a feature that allows uploading a product 
+photo and using Gemini Vision to detect metadata.
+
+STEP 1 - Backend (AI Flow):
+Create a Genkit flow in src/ai/ that:
+- Receives an image in base64
+- Calls Gemini Vision (gemini-2.0-flash or similar with vision)
+- Asks the model to detect:
+  * Product name (in Spanish)
+  * Category (one of: Fruit, Snack, Drink, Candy, Toy, Other)
+  * Suggested price in USD (based on what the product appears to be)
+  * A representative emoji
+- Returns a JSON with these fields
+
+STEP 2 - API Route:
+Create a Next.js API route (src/app/api/analyze-product/route.ts) that:
+- Receives the image as base64 in the body
+- Calls the Genkit flow
+- Returns the JSON with detected metadata
+
+STEP 3 - Frontend:
+In the admin panel (ProductManagement.tsx):
+- Add a &#39;📸 Upload with AI&#39; button next to the add product button
+- Create a modal that allows:
+  a) Selecting an image from the device (file input)
+  b) Taking a photo with the camera (navigator.mediaDevices)
+- Once it has the image:
+  a) Show an image preview
+  b) Call the API route with the base64 image
+  c) Show a loading indicator while processing
+  d) Pre-fill the new product form with detected data
+  e) Admin can edit before saving
+
+Use existing UI components (Dialog, Button, etc.) from src/components/ui/.
+The project already has @genkit-ai/googleai and genkit installed.&#34;
+</code></pre>
+<h2 is-upgraded>Step 4: Review the implementation</h2>
+<p>Gemini will have created/modified several files. Review them:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Give me a summary of all files you created or modified for the 
+upload with AI feature. For each one, explain:
+1. What it does
+2. How it connects with the others
+3. If there&#39;s anything I should review manually&#34;
+</code></pre>
+<table>
+<tr><td colspan="1" rowspan="1"><p>File</p>
+</td><td colspan="1" rowspan="1"><p>Purpose</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/ai/analyze-product.ts</code></p>
+</td><td colspan="1" rowspan="1"><p>Genkit flow for image analysis</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/app/api/analyze-product/route.ts</code></p>
+</td><td colspan="1" rowspan="1"><p>API route for the frontend</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/components/kiddie-mart/admin/UploadProductModal.tsx</code></p>
+</td><td colspan="1" rowspan="1"><p>Upload modal</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>src/components/kiddie-mart/admin/ProductManagement.tsx</code></p>
+</td><td colspan="1" rowspan="1"><p>Upload button added</p>
+</td></tr>
+</table>
+<h2 is-upgraded>Step 5: Test the feature</h2>
+<ol type="1">
+<li>Log in as <strong>Admin</strong> in the app</li>
+<li>Go to the <strong>Products</strong> section</li>
+<li>Click <strong>&#34;📸 Upload with AI&#34;</strong></li>
+<li>Upload a product image (fruit, snack, toy, etc.)</li>
+<li>Wait for AI to analyze the image</li>
+<li>Verify the form is pre-filled with reasonable data</li>
+<li>Adjust name/price if needed</li>
+<li>Save the product</li>
+</ol>
+<p>Verify:</p>
+<ul>
+<li>[ ] Upload modal appears correctly</li>
+<li>[ ] Can select an image from device</li>
+<li>[ ] Image preview is shown</li>
+<li>[ ] AI returns name, category, price, and emoji</li>
+<li>[ ] Form is pre-filled with AI data</li>
+<li>[ ] Can edit before saving</li>
+<li>[ ] Product saves successfully</li>
+</ul>
+<aside class="special"><p> If detection isn&#39;t perfect, don&#39;t worry. Vision models are good but not perfect, which is why the flow allows editing before saving. </p>
+</aside>
+<p>If the API fails:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The call to the analyze-product API is failing with error 401. 
+How can I verify that the Google AI API Key is being read correctly 
+on the server-side?&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Challenge 11: New Feature — Save Data to Firebase" duration="1">
+        <p>In the last workshop challenge, you&#39;ll migrate data storage from <strong>IndexedDB</strong> (local) to <strong>Firebase Firestore</strong> (cloud). This allows data to be shared across devices and persisted in the cloud.</p>
+<h2 is-upgraded>What you&#39;ll build</h2>
+<ul>
+<li><strong>Firebase</strong> configuration in the project</li>
+<li><strong>Firestore</strong> service replicating IndexedDB functions</li>
+<li>Context <strong>migration</strong> to use the new service</li>
+<li><strong>Fallback</strong> to IndexedDB when Firebase is unavailable</li>
+</ul>
+<h2 is-upgraded>Step 1: Create Firebase project</h2>
+<ol type="1">
+<li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
+<li>Click <strong>&#34;Create a project&#34;</strong></li>
+<li>Name: <code>kiddie-mart-workshop</code> (or similar)</li>
+<li>Disable Google Analytics (not needed for the workshop)</li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p><strong>Create web app:</strong></p>
+<ol type="1">
+<li>In the project, click the <strong>Web</strong> icon (<code></></code>)</li>
+<li>App name: <code>kiddie-mart</code></li>
+<li><strong>Don&#39;t</strong> enable Firebase Hosting for now</li>
+<li>Copy the Firebase configuration shown</li>
+</ol>
+<p><strong>Create Firestore database:</strong></p>
+<ol type="1">
+<li>In the side menu, go to <strong>Firestore Database</strong></li>
+<li>Click <strong>Create database</strong></li>
+<li>Select <strong>test mode</strong> (allows read/write without authentication)</li>
+<li>Choose the nearest location</li>
+</ol>
+<aside class="warning"><p> Test mode is only for the workshop. In production, always configure proper security rules in Firestore. </p>
+</aside>
+<h2 is-upgraded>Step 2: Configure Firebase in the project</h2>
+<p>Ask Gemini CLI to configure Firebase:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;I need to configure Firebase in the project. I already have:
+- firebase as a dependency in package.json
+- A project in Firebase Console with Firestore enabled
+
+I need you to:
+1. Create a src/lib/firebase.ts file with the SDK configuration
+2. Use environment variables from .env.local for sensitive values:
+   - NEXT_PUBLIC_FIREBASE_API_KEY
+   - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+   - NEXT_PUBLIC_FIREBASE_PROJECT_ID
+   - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+   - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+   - NEXT_PUBLIC_FIREBASE_APP_ID
+3. Export the app and Firestore instances
+4. Handle the case where variables aren&#39;t configured 
+   (to not break the app if someone doesn&#39;t have Firebase)&#34;
+</code></pre>
+<p>Add your Firebase credentials to <code>.env.local</code>:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Give me the environment variables template I need to add 
+to .env.local for Firebase, with comments explaining each one&#34;
+</code></pre>
+<h2 is-upgraded>Step 3: Analyze the current IndexedDB service</h2>
+<p>Before creating the Firestore service, understand the current one:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Analyze src/lib/indexedDbService.ts and give me:
+1. List of all exported functions
+2. For each function: parameters, return type, and what it does
+3. What collections/stores it manages
+4. The data schema (what fields each entity has)
+
+I need this information to create an equivalent Firestore service.&#34;
+</code></pre>
+<p>Gemini should identify functions like:</p>
+<ul>
+<li><code>openDB()</code> — Initialize the database</li>
+<li><code>getAllProducts()</code> / <code>addProductDB()</code> / <code>updateProductDB()</code> / <code>deleteProductDB()</code></li>
+<li><code>getAllSalesHistory()</code> / <code>addSaleRecordDB()</code></li>
+<li><code>getAllAccounts()</code> / <code>addAccountDB()</code> / <code>updateAccountDB()</code></li>
+<li><code>bulkAddProductsDB()</code> / <code>bulkAddSalesHistoryDB()</code></li>
+</ul>
+<h2 is-upgraded>Step 4: Create the Firestore service</h2>
+<p>Now, request the implementation:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Create a new file src/lib/firestoreService.ts that replicates 
+all functions from indexedDbService.ts but using Firebase Firestore.
+
+REQUIREMENTS:
+1. Same interface (same function names, same parameters and returns)
+2. Firestore collections:
+   - &#39;products&#39; for products
+   - &#39;salesHistory&#39; for sales history
+   - &#39;accounts&#39; for wallet accounts
+3. Document IDs should be the same IDs used by the entities
+4. Use existing types from src/types/kiddieMart.ts
+5. Handle errors gracefully
+6. If Firebase isn&#39;t initialized, functions should throw a 
+   descriptive error (don&#39;t fail silently)
+
+I ALSO need you to:
+7. Create a src/lib/storageService.ts file that acts as a &#39;switch&#39;:
+   - If Firebase is configured → use firestoreService
+   - If Firebase is NOT configured → use indexedDbService
+   - Export the same functions with the same interface
+   - This will be the service imported by KiddieMartContext
+
+8. Update src/context/KiddieMartContext.tsx to import from 
+   storageService.ts instead of indexedDbService.ts directly&#34;
+</code></pre>
+<h2 is-upgraded>Step 5: Review the implementation</h2>
+<p>Review all created/modified files:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;Show me a diagram of how services connect now:
+1. KiddieMartContext.tsx
+2. storageService.ts (switch)
+3. firestoreService.ts (cloud)
+4. indexedDbService.ts (local)
+5. firebase.ts (config)
+
+Does the fallback work correctly if I remove the Firebase variables?&#34;
+</code></pre>
+<p>Expected diagram:</p>
+<pre><code>KiddieMartContext.tsx
+        ↓
+  storageService.ts
+      ↙        ↘
+firestoreService  indexedDbService
+      ↓
+  firebase.ts
+      ↓
+  Firebase Cloud
+</code></pre>
+<h2 is-upgraded>Step 6: Test the integration</h2>
+<p><strong>Test 1: With Firebase configured</strong></p>
+<ol type="1">
+<li>Make sure <code>.env.local</code> has Firebase credentials</li>
+<li>Restart the development server (<code>make dev</code>)</li>
+<li>Log in as <strong>Admin</strong> and add a product</li>
+<li>Go to <strong>Firebase Console</strong> → <strong>Firestore</strong> → <code>products</code> collection</li>
+<li>Verify the product appears in Firestore 🎉</li>
+</ol>
+<p><strong>Test 2: Without Firebase (fallback)</strong></p>
+<ol type="1">
+<li>Temporarily rename <code>.env.local</code> to <code>.env.local.bak</code></li>
+<li>Restart the server</li>
+<li>The app should work normally using IndexedDB</li>
+<li>Rename back <code>.env.local.bak</code> to <code>.env.local</code></li>
+</ol>
+<p>Verify:</p>
+<ul>
+<li>[ ] Products are saved to Firestore</li>
+<li>[ ] Sales are recorded in Firestore</li>
+<li>[ ] Wallet accounts are saved to Firestore</li>
+<li>[ ] Without Firebase, the app uses IndexedDB as before</li>
+<li>[ ] No errors in the console</li>
+</ul>
+<aside class="special"><p> If tests pass, you&#39;ve successfully migrated the entire data layer to the cloud with full backward compatibility! </p>
+</aside>
+<p>If there are permission issues:</p>
+<pre><code language="language-bash" class="language-bash">gemini &#34;The app connects to Firestore but gets a permissions error. 
+Firestore rules are in test mode. What could be wrong?&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Congratulations!" duration="1">
+        <p>🎉 <strong>You&#39;ve completed all the workshop challenges!</strong> 🎉</p>
+<h2 is-upgraded>Workshop Summary</h2>
+<p>Throughout these 11 challenges you learned:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Skill</p>
+</td><td colspan="1" rowspan="1"><p>Challenges</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Installation and configuration</p>
+</td><td colspan="1" rowspan="1"><p>1, 2</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Documentation generation</p>
+</td><td colspan="1" rowspan="1"><p>3, 4, 5</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Project setup</p>
+</td><td colspan="1" rowspan="1"><p>5, 6</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Debugging with AI</p>
+</td><td colspan="1" rowspan="1"><p>7, 8</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Feature implementation</p>
+</td><td colspan="1" rowspan="1"><p>9, 10, 11</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Service integration</p>
+</td><td colspan="1" rowspan="1"><p>10, 11</p>
+</td></tr>
+</table>
+<h2 is-upgraded>What you created</h2>
+<ul>
+<li><code>GEMINI.md</code> — Project context for AI</li>
+<li><code>README.md</code> — Professional documentation</li>
+<li><code>docs/ONBOARDING.md</code> — Developer onboarding guide</li>
+<li><code>Makefile</code> — Task runner with all project commands</li>
+<li><strong>Theme system</strong> with visual selector</li>
+<li><strong>Product upload with AI Vision</strong></li>
+<li><strong>Firebase Firestore</strong> integration with local fallback</li>
+</ul>
+<h2 is-upgraded>Additional resources</h2>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs" target="_blank">Gemini CLI Documentation</a></li>
+<li><a href="https://firebase.google.com/docs/firestore" target="_blank">Firebase Firestore Docs</a></li>
+<li><a href="https://firebase.google.com/docs/genkit" target="_blank">Genkit Documentation</a></li>
+<li><a href="https://nextjs.org/docs" target="_blank">Next.js Documentation</a></li>
+</ul>
+<h2 is-upgraded>Thank you for participating! 🙏</h2>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
