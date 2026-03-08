@@ -65,8 +65,8 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
       setIsLoadingData(true);
       try {
         await openDB();
-        let dbProducts = await getAllProducts() || undefined;
-        if (dbProducts?.length === 0) {
+        let dbProducts = await getAllProducts();
+        if (dbProducts === null) {
           console.log('No products in DB, seeding initial products...');
           await bulkAddProductsDB(INITIAL_PRODUCTS);
           dbProducts = INITIAL_PRODUCTS;
@@ -88,7 +88,7 @@ export const KiddieMartProvider = ({ children }: { children: ReactNode }) => {
         console.error("Error loading data from IndexedDB:", error);
         toast({ title: "Error de Carga 😟", description: "No se pudieron cargar los datos de la tienda.", variant: "destructive" });
         // Fallback to mock data if IndexedDB fails critically during init
-        setProducts(INITIAL_PRODUCTS);
+        // setProducts(INITIAL_PRODUCTS);
         setSalesHistory(MOCK_SALES_HISTORY.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
       } finally {
         setIsLoadingData(false);
